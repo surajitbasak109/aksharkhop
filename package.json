@@ -1,0 +1,25 @@
+{
+    "name": "aksharkhop",
+    "private": true,
+    "version": "0.0.0",
+    "description": "Aksharkhop (অক্ষরখোপ): a Bengali crossword builder",
+    "type": "module",
+    "scripts": {
+        "test": "pnpm -r --if-present test",
+        "typecheck": "pnpm -r --if-present typecheck",
+        "lint": "eslint .",
+        "format": "prettier --write .",
+        "seg": "node packages/core/src/cli.ts"
+    },
+    "engines": {
+        "node": ">=22.18"
+    },
+    "devDependencies": {
+        "@types/node": "^26.6.6",
+        "eslint": "^10.14.0",
+        "prettier": "^3.9.10",
+        "typescript": "5.9.3",
+        "typescript-eslint": "^8.72.1",
+        "vitest": "^5.1.0"
+    }
+}
