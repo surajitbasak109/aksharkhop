@@ -4,7 +4,8 @@
     python3 scripts/build_wordlist.py
 
 Writes:
-    public/words.bn.json                    the shipped list (words from "ship" sources only)
+    public/words.bn.json                    the full list (words from "ship" sources only); NOT committed
+    public/words.txt                        the small list the browser loads (word + frequency only); committed
     data/processed/words.enriched.jsonl     part of speech + English glosses (build-only text, NOT shipped)
     data/processed/wordlist_report.md       the same stats that are printed
     data/processed/spelling_variant_candidates.tsv   ি/ী and ু/ূ pairs for the human to decide
@@ -33,6 +34,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / 'data' / 'raw'
 OUT_LIST = ROOT / 'public' / 'words.bn.json'
+OUT_TXT = ROOT / 'public' / 'words.txt'
 OUT_ENRICHED = ROOT / 'data' / 'processed' / 'words.enriched.jsonl'
 OUT_REPORT = ROOT / 'data' / 'processed' / 'wordlist_report.md'
 BLOCKLIST = ROOT / 'data' / 'blocklist.txt'
@@ -288,6 +290,19 @@ def render_list(entries: list[dict]) -> str:
     return '{"version":1,"count":%d,"words":[\n%s\n]}\n' % (len(entries), ',\n'.join(lines))
 
 
+WORD_FILE_HEADER = '# aksharkhop words v1'
+
+
+def render_words_txt(entries: list[dict]) -> str:
+    """The small list the browser loads: one word per line, then a tab and the frequency score when it is
+    known (above 0). Cells are left out: the app splits each word with the same splitter as everywhere else.
+    Must stay readable by packages/core/src/wordFile.ts. Same input always gives the same text."""
+    lines = [WORD_FILE_HEADER]
+    for e in entries:
+        lines.append(f"{e['w']}\t{e['freq']}" if e['freq'] > 0 else e['w'])
+    return '\n'.join(lines) + '\n'
+
+
 def render_enriched(entries: list[dict], kaikki: dict[str, list[dict]]) -> str:
     out = []
     for e in entries:
@@ -347,6 +362,8 @@ def main() -> int:
     OUT_ENRICHED.parent.mkdir(parents=True, exist_ok=True)
     text = render_list(entries)
     OUT_LIST.write_text(text, encoding='utf-8', newline='\n')
+    txt = render_words_txt(entries)
+    OUT_TXT.write_text(txt, encoding='utf-8', newline='\n')
     OUT_ENRICHED.write_text(render_enriched(entries, kaikki), encoding='utf-8', newline='\n')
 
     kawshik_keys = {key(w) for w in raw_words}
@@ -357,6 +374,8 @@ def main() -> int:
     print(rep)
     print(f'sha256 of {OUT_LIST.relative_to(ROOT)}: {hashlib.sha256(text.encode("utf-8")).hexdigest()}')
     print(f'size: {len(text.encode("utf-8")) / 1e6:.1f} MB')
+    print(f'sha256 of {OUT_TXT.relative_to(ROOT)}: {hashlib.sha256(txt.encode("utf-8")).hexdigest()}')
+    print(f'size: {len(txt.encode("utf-8")) / 1e6:.2f} MB')
     return 0
 
 

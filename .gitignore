@@ -5,7 +5,8 @@ dist/
 __pycache__/
 data/processed/
 .~lock.*#
-# Built by scripts/build_wordlist.py from data/raw/ (not committed; human decision 2026-11-05)
+# The full list built by scripts/build_wordlist.py from data/raw/ (not committed; human decision 2026-11-05).
+# The small public/words.txt built beside it IS committed: it is what the app loads.
 public/words.bn.json
 # Puzzles saved from the editor (human decision 2026-11-05)
 data/saved/

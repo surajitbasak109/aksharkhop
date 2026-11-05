@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { applyPlacements, autofill, FillSearch, type FillResult } from '../src/autofill.ts';
 import { cellLetter, conflicts, placeAnswer, slotCells, slots, type Grid } from '../src/grid.ts';
 import { suggestWords } from '../src/suggest.ts';
+import { parseWordFile } from '../src/wordFile.ts';
 import { WordIndex, type WordEntry } from '../src/wordIndex.ts';
 import { entry, gridFrom, mulberry32 } from './helpers.ts';
 
@@ -407,8 +408,8 @@ describe('suggestWords', () => {
     });
 });
 
-// Benchmarks on the real word list (public/words.bn.json, built locally and not committed).
-const WORDS = new URL('../../../public/words.bn.json', import.meta.url);
+// Benchmarks on the real word list (public/words.txt, committed).
+const WORDS = new URL('../../../public/words.txt', import.meta.url);
 const haveWords = existsSync(WORDS);
 
 const PATTERNS: Record<string, string[]> = {
@@ -498,10 +499,7 @@ const PATTERNS: Record<string, string[]> = {
 };
 
 describe.skipIf(!haveWords)('benchmark on the real word list', () => {
-    const data = haveWords
-        ? (JSON.parse(readFileSync(WORDS, 'utf8')) as { words: WordEntry[] })
-        : { words: [] };
-    const index = new WordIndex(data.words);
+    const index = new WordIndex(haveWords ? parseWordFile(readFileSync(WORDS, 'utf8')) : []);
 
     for (const [name, pattern] of Object.entries(PATTERNS)) {
         it(`${name} pattern fills in under 5 s (seeds 1 and 2)`, { timeout: 30000 }, () => {

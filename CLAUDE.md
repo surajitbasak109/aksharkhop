@@ -22,5 +22,5 @@ Commands (from the repo root):
 - `pnpm dev` runs the editor at http://localhost:5173 (`pnpm build` builds it)
 - `pnpm test` / `pnpm typecheck` / `pnpm lint` / `pnpm format`
 - `pnpm seg ক্ষমা` prints the cells; `pnpm seg words.txt` does a file
-- `python3 scripts/build_wordlist.py` rebuilds `public/words.bn.json` (needs `data/raw/`); `python3 -m unittest discover -s scripts -v` tests it
+- `python3 scripts/build_wordlist.py` rebuilds `public/words.bn.json` (untracked) and `public/words.txt` (the small list the app loads, committed) (needs `data/raw/`); `python3 -m unittest discover -s scripts -v` tests it
 - `node scripts/check-segmentation.mjs` compares `data/test/segmentation.tsv` with Pataparbon's splitter

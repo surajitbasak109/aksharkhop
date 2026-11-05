@@ -111,6 +111,12 @@ class Output(unittest.TestCase):
         self.assertIn('কখ', text)  # Bengali written as-is, not \u escapes
         self.assertEqual(text.count('\n'), 4)  # one entry per line
 
+    def test_words_txt_is_small_and_repeatable(self):
+        text = b.render_words_txt(self.entries)
+        self.assertEqual(text, b.render_words_txt(self.entries))
+        self.assertEqual(text, '# aksharkhop words v1\nকখ\t0.5\nগঘ\n')  # no score for an unknown (0) frequency
+        self.assertNotIn('cells', text)
+
     def test_enriched_has_only_listed_words(self):
         out = b.render_enriched(self.entries, {'কখ': [{'pos': 'noun', 'glosses': ['x']}], 'ঙচ': [{'pos': 'noun', 'glosses': ['y']}]})
         rows = [json.loads(l) for l in out.strip().split('\n')]

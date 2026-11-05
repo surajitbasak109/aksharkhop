@@ -1,6 +1,6 @@
-// Loads the word list, builds the index, and runs fills and suggestions off the page's thread.
+// Loads the word list (public/words.txt), splits it into aksharas, builds the index, and runs fills and suggestions off the page's thread.
 // A fill runs in slices of 50 ms with a pause between, so a "cancel" message can get through.
-import { FillSearch, suggestWords, WordIndex, type WordEntry } from '@aksharkhop/core';
+import { FillSearch, parseWordFile, suggestWords, WordIndex } from '@aksharkhop/core';
 import type { FromWorker, ToWorker } from './fillProtocol.ts';
 import { WORDS_URL } from './wordsUrl.ts';
 
@@ -15,8 +15,7 @@ const cancelled = new Set<number>();
 const ready: Promise<WordIndex | null> = fetch(WORDS_URL)
     .then(async (res) => {
         if (!res.ok) return null;
-        const data = (await res.json()) as { words: WordEntry[] };
-        index = new WordIndex(data.words);
+        index = new WordIndex(parseWordFile(await res.text()));
         ctx.postMessage({ type: 'ready', words: index.count });
         return index;
     })

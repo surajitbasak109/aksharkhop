@@ -6,7 +6,7 @@
     "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
     "headers": [
         {
-            "source": "/words.bn.json",
+            "source": "/words.txt",
             "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
         },
         {

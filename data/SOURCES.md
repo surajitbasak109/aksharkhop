@@ -33,7 +33,7 @@ Why: share-alike licenses (CC BY-SA, CC BY-NC-SA, GPL) would put the same licens
 
 Consequence: a word found only in a build-only source cannot go into the shipped list unless the human accepts that source's license. The pipeline (Phase 2) must record each word's `src` and **ship only words that appear in a "ship" source**.
 
-Derived files: `public/words.bn.json` holds only kawshik's words plus numeric scores and source names. Kaikki's part of speech and English glosses are written to `data/processed/words.enriched.jsonl`, which is untracked and **must not be shipped**.
+Derived files: `public/words.bn.json` (not committed) and `public/words.txt` (committed, the one the app loads) hold only kawshik's words plus numeric scores (`words.bn.json` also lists the names of the sources that confirm a word). Kaikki's part of speech and English glosses are written to `data/processed/words.enriched.jsonl`, which is untracked and **must not be shipped**.
 
 ## Not downloaded (yet)
 

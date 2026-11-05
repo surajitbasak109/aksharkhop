@@ -1,5 +1,6 @@
-// Loads public/words.bn.json once, for the "in the word list" hint. The file is optional
-// (it is built locally by scripts/build_wordlist.py and not committed).
+// Loads public/words.txt once, for the "in the word list" hint. The file is optional: if it is missing
+// (or is not a word file) the hint just says the list was not found.
+import { readWordFile } from '@aksharkhop/core';
 import { useEffect, useState } from 'react';
 import { WORDS_URL } from './wordsUrl.ts';
 
@@ -12,8 +13,8 @@ function load(): Promise<WordListState> {
     cache ??= fetch(WORDS_URL)
         .then(async (res) => {
             if (!res.ok) return { status: 'missing' } as const;
-            const data = (await res.json()) as { words: { w: string }[] };
-            return { status: 'ready', words: new Set(data.words.map((x) => x.w)) } as const;
+            const rows = readWordFile(await res.text());
+            return { status: 'ready', words: new Set(rows.map((r) => r.w)) } as const;
         })
         .catch(() => ({ status: 'missing' }) as const);
     return cache;

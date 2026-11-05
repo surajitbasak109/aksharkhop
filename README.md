@@ -31,8 +31,9 @@ Needs Node 22.18 or newer and pnpm.
 1. Import the repository in Vercel. Leave the root directory as the repository root.
 2. Deploy.
 
-**The word list is not in the repository** (`public/words.bn.json`, built by
-`python3 scripts/build_wordlist.py` from `data/raw/`). Without it a deployed site works, but word
-suggestions and auto-fill say that the word list was not found. To give the deployed site the word list,
-either add the file to the deployment, or host it somewhere that allows cross-origin requests and set
-`VITE_WORDS_URL` to its address in the Vercel project settings, then redeploy.
+**The word list is in the repository** as `public/words.txt` (about 2 MB, 0.35 MB once Vercel compresses
+it): one word per line with its frequency score. The app splits the words into aksharas itself when it
+loads. `python3 scripts/build_wordlist.py` (needs `data/raw/`) rebuilds it, and also writes the full
+`public/words.bn.json`, which is not committed and not used by the app. To load the list from somewhere
+else, host it (the server must allow cross-origin requests) and set `VITE_WORDS_URL` in the Vercel project
+settings, then redeploy.

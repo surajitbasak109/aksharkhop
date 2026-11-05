@@ -15,3 +15,4 @@ export * from './suggest.ts';
 export * from './share.ts';
 export * from './solve.ts';
 export * from './samplePuzzle.ts';
+export * from './wordFile.ts';
