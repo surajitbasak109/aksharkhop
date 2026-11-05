@@ -6,5 +6,7 @@ export default defineConfig({
     // The repo-root public/ holds words.txt (the word list the app loads, built by scripts/build_wordlist.py)
     // and the favicon. The full words.bn.json built beside it is not committed and the app does not use it.
     publicDir: '../../public',
+    // The build goes to dist/ at the repository root, where Vercel looks by default.
+    build: { outDir: '../../dist', emptyOutDir: true },
     server: { port: 5173, strictPort: true },
 });

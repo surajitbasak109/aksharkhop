@@ -3,4 +3,4 @@ data/
 pnpm-lock.yaml
 public/words.bn.json
 packages/core/test/fixtures/
-apps/web/dist/
+dist/

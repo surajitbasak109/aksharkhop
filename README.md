@@ -27,7 +27,7 @@ Needs Node 22.18 or newer and pnpm.
 ## Deploy to Vercel
 
 `vercel.json` already holds the settings: install with `pnpm install --frozen-lockfile`, build with
-`pnpm build`, publish `apps/web/dist`, and send every address to `index.html` so deep links such as
+`pnpm build`, publish `dist` (the build writes there, at the repository root), and send every address to `index.html` so deep links such as
 `/solve` work.
 
 1. Import the repository in Vercel. Leave the root directory as the repository root.
