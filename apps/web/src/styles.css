@@ -1,0 +1,393 @@
+:root {
+    --bg: #f6f4ef;
+    --surface: #ffffff;
+    --text: #1d1b18;
+    --muted: #6b665d;
+    --line: #d8d3c8;
+    --cell-bg: #ffffff;
+    --block: #1d1b18;
+    --slot: #fbeec2;
+    --selected: #f2c94c;
+    --conflict-bg: #fbd5d0;
+    --conflict: #b3261e;
+    --preview: #8a7b55;
+    --accent: #2f5d8a;
+    --good: #2e7d32;
+    color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #171614;
+        --surface: #22201d;
+        --text: #ece8e1;
+        --muted: #a39d92;
+        --line: #403c36;
+        --cell-bg: #2b2925;
+        --block: #050505;
+        --slot: #4a4120;
+        --selected: #8a6d12;
+        --conflict-bg: #5c2320;
+        --conflict: #ff8a80;
+        --preview: #c7b98f;
+        --accent: #8fb8e0;
+        --good: #81c784;
+        color-scheme: dark;
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans Bengali', 'Hind Siliguri', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.t .en {
+    color: var(--muted);
+    font-size: 0.82em;
+}
+.t-block .en {
+    display: block;
+}
+
+.app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+}
+.top h1 {
+    margin: 0;
+    font-size: 26px;
+}
+.tagline {
+    margin: 0;
+}
+.meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.meta label {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+}
+
+input,
+button {
+    font: inherit;
+    color: inherit;
+}
+input:not([type='checkbox']) {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 5px 8px;
+}
+button {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+button:hover:not(:disabled) {
+    border-color: var(--accent);
+}
+button:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+button[aria-pressed='true'],
+button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--surface);
+}
+button[aria-pressed='true'] .en,
+button.primary .en {
+    color: inherit;
+    opacity: 0.8;
+}
+button.link {
+    border: none;
+    background: none;
+    padding: 0;
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin: 14px 0;
+}
+.sep {
+    width: 1px;
+    height: 24px;
+    background: var(--line);
+}
+.mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.mode-label {
+    font-size: 13px;
+}
+.check {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+}
+.size-tag {
+    margin-left: auto;
+    color: var(--muted);
+}
+
+.notice {
+    position: relative;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 10px 36px 10px 14px;
+    margin-bottom: 12px;
+}
+.notice.error {
+    border-color: var(--conflict);
+}
+.notice ul {
+    margin: 6px 0 0;
+    padding-left: 20px;
+}
+.notice > button {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.workspace {
+    display: grid;
+    grid-template-columns: auto minmax(280px, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+@media (max-width: 860px) {
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* The board. Cells are square and big enough for wide conjuncts (ন্ত্র) and for vowel signs above
+   and below the letter (ু ূ ৃ ঁ), so nothing is clipped. */
+.board {
+    --cell: clamp(30px, min(calc((100vw - 32px) / var(--cols)), calc(620px / var(--cols))), 56px);
+    display: inline-flex;
+    flex-direction: column;
+    border: 2px solid var(--block);
+    background: var(--block);
+    gap: 1px;
+    outline: none;
+    user-select: none;
+}
+.board:focus-visible {
+    box-shadow: 0 0 0 3px var(--accent);
+}
+.board-row {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), var(--cell));
+    gap: 1px;
+}
+.cell {
+    position: relative;
+    width: var(--cell);
+    height: var(--cell);
+    background: var(--cell-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.block-mode .cell {
+    cursor: crosshair;
+}
+.cell.block {
+    background: var(--block);
+}
+.cell.in-slot {
+    background: var(--slot);
+}
+.cell.selected {
+    background: var(--selected);
+}
+.cell.block.selected {
+    background: var(--block);
+    box-shadow: inset 0 0 0 3px var(--selected);
+}
+.cell.conflict {
+    background: var(--conflict-bg);
+    box-shadow: inset 0 0 0 2px var(--conflict);
+}
+.cell.preview-conflict {
+    box-shadow: inset 0 0 0 2px var(--conflict);
+}
+.num {
+    position: absolute;
+    top: 1px;
+    left: 3px;
+    font-size: calc(var(--cell) * 0.22);
+    line-height: 1;
+    color: var(--muted);
+}
+.letter {
+    font-size: calc(var(--cell) * 0.42);
+    line-height: 1.6;
+    padding-top: calc(var(--cell) * 0.08);
+    white-space: nowrap;
+}
+.letter.ghost {
+    color: var(--preview);
+}
+.preview-conflict .letter.ghost {
+    color: var(--conflict);
+}
+.letter.split {
+    display: flex;
+    gap: 2px;
+    font-size: calc(var(--cell) * 0.3);
+    color: var(--conflict);
+}
+.letter.split span + span::before {
+    content: '/';
+    margin-right: 2px;
+    color: var(--muted);
+}
+
+.side {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+.panel h2 {
+    font-size: 15px;
+    margin: 0 0 8px;
+}
+.panel p {
+    margin: 4px 0;
+}
+.answer-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.answer-input {
+    flex: 1 1 100%;
+    min-width: 0;
+    font-size: 18px;
+}
+.cells-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 8px;
+}
+.chip {
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0 6px;
+    font-size: 17px;
+    line-height: 1.7;
+}
+.chip.over {
+    border-color: var(--conflict);
+    color: var(--conflict);
+}
+.errors {
+    color: var(--conflict);
+    margin: 6px 0 0;
+    padding-left: 18px;
+}
+.warn {
+    color: var(--conflict);
+}
+.hint.good {
+    color: var(--good);
+}
+.muted {
+    color: var(--muted);
+}
+.small {
+    font-size: 12px;
+}
+.conflict-list,
+.keys ul {
+    margin: 0;
+    padding-left: 18px;
+}
+.pair b {
+    color: var(--conflict);
+}
+
+.dialog {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    padding: 18px 22px;
+    max-width: calc(100vw - 32px);
+}
+.dialog::backdrop {
+    background: rgb(0 0 0 / 0.4);
+}
+.dialog h2 {
+    margin-top: 0;
+}
+.presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.dialog fieldset {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+}
+.dialog fieldset label {
+    display: flex;
+    flex-direction: column;
+}
+.dialog fieldset input {
+    width: 80px;
+}
+.dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 14px;
+}

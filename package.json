@@ -9,7 +9,9 @@
         "typecheck": "pnpm -r --if-present typecheck",
         "lint": "eslint .",
         "format": "prettier --write .",
-        "seg": "node packages/core/src/cli.ts"
+        "seg": "node packages/core/src/cli.ts",
+        "dev": "pnpm --filter @aksharkhop/web dev",
+        "build": "pnpm --filter @aksharkhop/web build"
     },
     "engines": {
         "node": ">=22.18"
