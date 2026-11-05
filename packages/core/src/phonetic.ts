@@ -122,7 +122,7 @@ export function phoneticToBengali(input: string): string {
     let out = '';
     let prev: 'consonant' | 'other' = 'other';
 
-    for (let i = 0; i < input.length; ) {
+    for (let i = 0; i < input.length;) {
         const m = match(input, i);
         if (!m) {
             out += input[i];

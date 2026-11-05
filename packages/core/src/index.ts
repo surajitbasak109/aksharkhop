@@ -7,3 +7,5 @@ export * from './grid.ts';
 export * from './puzzle.ts';
 export { formatJson } from './json.ts';
 export { phoneticToBengali, PHONETIC_TABLE } from './phonetic.ts';
+export * from './clues.ts';
+export * from './exportPataparbon.ts';

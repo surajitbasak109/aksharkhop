@@ -439,3 +439,235 @@ button.link {
     margin: 0;
     font-size: 16px;
 }
+
+/* Clue panel */
+.clue-panel {
+    margin-top: 20px;
+}
+.clue-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+.clue-summary {
+    margin: 0 0 8px;
+}
+.clue-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+}
+.clue-list h3 {
+    font-size: 14px;
+    margin: 0 0 6px;
+}
+.clue-list ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 420px;
+    overflow-y: auto;
+    position: relative;
+}
+.clue-row {
+    display: flex;
+    gap: 8px;
+    padding: 6px 6px;
+    border-bottom: 1px solid var(--line);
+    border-left: 3px solid transparent;
+}
+.clue-row.active {
+    background: var(--slot);
+    border-left-color: var(--selected);
+}
+.clue-row.needs-clue:not(.active) {
+    border-left-color: var(--line);
+}
+.clue-num {
+    flex: none;
+    min-width: 2.2em;
+    height: 2em;
+    padding: 0 6px;
+    font-weight: 700;
+}
+.clue-body {
+    flex: 1;
+    min-width: 0;
+}
+.clue-answer {
+    font-size: 15px;
+    line-height: 1.5;
+}
+.clue-input {
+    width: 100%;
+    margin-top: 2px;
+}
+.clue-body p {
+    margin: 2px 0 0;
+}
+.converted.small {
+    font-size: 15px;
+}
+
+/* Dialogs added in Phase 4 */
+.export-dialog {
+    width: min(680px, calc(100vw - 32px));
+}
+.problem-list {
+    max-height: 240px;
+    overflow-y: auto;
+    padding-left: 20px;
+    margin: 6px 0;
+}
+.export-dialog h3 {
+    font-size: 14px;
+    margin: 12px 0 4px;
+}
+.json-preview pre {
+    max-height: 240px;
+    overflow: auto;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 12px;
+}
+.good {
+    color: var(--good);
+}
+.layouts {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0 0 10px;
+}
+
+/* The print sheet is hidden on screen. */
+.print-sheet {
+    display: none;
+}
+
+@media print {
+    @page {
+        size: A4;
+        margin: 12mm;
+    }
+    html,
+    body {
+        background: #fff;
+        color: #000;
+    }
+    .app {
+        display: none !important;
+    }
+    .print-sheet {
+        display: block;
+        color: #000;
+        background: #fff;
+        font-size: 10.5pt;
+        line-height: 1.45;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .print-page {
+        break-after: page;
+    }
+    .print-page:last-child {
+        break-after: auto;
+    }
+    .print-head {
+        text-align: center;
+        margin-bottom: 5mm;
+    }
+    .print-head h1 {
+        font-size: 20pt;
+        margin: 0;
+    }
+    .print-head p {
+        margin: 1mm 0 0;
+    }
+
+    /* Cell size: up to 14 mm, smaller on big grids so the grid fits the 186 mm width. */
+    .print-grid {
+        --pc: min(14mm, calc(170mm / var(--cols)), calc(160mm / var(--rows)));
+        display: grid;
+        grid-template-columns: repeat(var(--cols), var(--pc));
+        grid-auto-rows: var(--pc);
+        gap: 0;
+        width: max-content;
+        margin: 0 auto 6mm;
+        border: 0.5mm solid #000;
+        break-inside: avoid;
+    }
+    .pcell {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0.2mm solid #000;
+        background: #fff;
+        overflow: visible;
+    }
+    .pblock {
+        background: #000;
+    }
+    .pnum {
+        position: absolute;
+        top: 0.3mm;
+        left: 0.7mm;
+        font-size: calc(var(--pc) * 0.27);
+        line-height: 1;
+    }
+    .pletter {
+        /* Extra line height and top padding keep vowel signs above and below the letter inside the cell. */
+        font-size: calc(var(--pc) * 0.5);
+        line-height: 1.5;
+        padding-top: calc(var(--pc) * 0.1);
+        white-space: nowrap;
+    }
+    .pletter.wide {
+        font-size: calc(var(--pc) * 0.42);
+    }
+    .print-clues {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 10mm;
+        align-items: start;
+    }
+    .print-clue-col {
+        margin-bottom: 3mm;
+    }
+    .print-clue-col h2 {
+        font-size: 12pt;
+        margin: 0 0 1.5mm;
+        border-bottom: 0.3mm solid #000;
+        break-after: avoid;
+    }
+    .print-clue-col ol {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .print-clue-col li {
+        margin-bottom: 1.2mm;
+        break-inside: avoid;
+    }
+    .plen {
+        font-size: 0.85em;
+    }
+    .print-credit {
+        margin-top: 4mm;
+        font-size: 8pt;
+        color: #444;
+        text-align: center;
+    }
+    .print-sheet .t .en,
+    .print-credit .en {
+        font-size: 0.8em;
+        color: #444;
+    }
+}

@@ -95,6 +95,64 @@ export const ui = {
     keyEsc: { bn: 'Esc: ছক-এ ফেরা', en: 'Esc: back to the grid' },
     board: { bn: 'শব্দছকের ঘর', en: 'Crossword grid' },
     savedLocally: { bn: 'এই ব্রাউজারে নিজে থেকেই সংরক্ষিত হয়', en: 'Autosaved in this browser' },
+    clues: { bn: 'সূত্র', en: 'Clues' },
+    clueFor: { bn: 'সূত্র লিখুন', en: 'Write the clue' },
+    cluePlaceholder: { bn: 'সূত্র লিখুন', en: 'Write the clue' },
+    noAnswer: { bn: 'উত্তর নেই', en: 'no answer yet' },
+    clueGivesAway: { bn: 'সূত্রে উত্তরটিই লেখা আছে', en: 'The clue contains its own answer' },
+    noSlotsYet: {
+        bn: 'এখনও কোনো শব্দ নেই। ছকে কালো ঘর বসিয়ে শব্দের জায়গা বানান।',
+        en: 'No words yet. Place blocks in the grid to make word slots.',
+    },
+    cluesPhonetic: { bn: 'সূত্রেও ফোনেটিক লেখা', en: 'Phonetic typing in clues' },
+    cluesPhoneticHint: {
+        bn: 'লেখা শেষে Enter চাপুন বা অন্য জায়গায় ক্লিক করুন: তখন বাংলা হয়ে বসবে।',
+        en: 'Press Enter or click elsewhere when done: the Bengali is saved then.',
+    },
+
+    exportPataparbon: { bn: 'Pataparbon-এর জন্য', en: 'Export to Pataparbon' },
+    exportTitleOk: { bn: 'Pataparbon-এ পাঠানো যাবে', en: 'Ready for Pataparbon' },
+    exportTitleBad: { bn: 'এখনও পাঠানো যাবে না', en: 'Cannot export yet' },
+    exportBadHelp: {
+        bn: 'Pataparbon এই নিয়মগুলো না মানলে ফাইল নেয় না। আগে এগুলো ঠিক করুন।',
+        en: 'Pataparbon rejects a file that breaks these rules. Fix them first.',
+    },
+    exportOkHelp: {
+        bn: 'Pataparbon অ্যাডমিন → Crosswords → New-তে ফাইলটি দিন বা JSON পেস্ট করুন।',
+        en: 'In Pataparbon Admin → Crosswords → New, upload the file or paste the JSON.',
+    },
+    exportFormHelp: {
+        bn: 'অ্যাডমিন ফর্মে এই মাপ লিখতে হবে, আর তারিখ ও শিরোনাম সেখানেই দিন:',
+        en: 'Enter this size in the admin form; the date and title are entered there too:',
+    },
+    exportWarnings: { bn: 'সতর্কতা (পাঠানো আটকাবে না)', en: 'Warnings (they do not block the export)' },
+    download: { bn: 'ফাইল নামান', en: 'Download .json' },
+    copyJson: { bn: 'JSON কপি করুন', en: 'Copy JSON' },
+    copied: { bn: 'কপি হয়েছে', en: 'Copied' },
+    copyFailed: { bn: 'কপি করা গেল না; ফাইল নামান', en: 'Could not copy; download the file' },
+    showJson: { bn: 'JSON দেখুন', en: 'Show the JSON' },
+    close: { bn: 'বন্ধ করুন', en: 'Close' },
+    importedPataparbon: {
+        bn: 'Pataparbon-এর ফাইল খোলা হয়েছে। শিরোনাম ও নির্মাতা ফাঁকা, ভরে নিন।',
+        en: 'Opened a Pataparbon file. Title and author are empty; fill them in.',
+    },
+
+    print: { bn: 'ছাপুন', en: 'Print' },
+    printTitle: { bn: 'ছাপার ধরন', en: 'Print layout' },
+    printHelp: {
+        bn: 'A4 কাগজে ছাপা হবে। ব্রাউজারের ছাপার জানালায় "PDF-এ সংরক্ষণ" বেছে নিলে PDF হবে।',
+        en: 'Prints on A4. Choose "Save as PDF" in the browser print window to get a PDF.',
+    },
+    layoutPuzzle: { bn: 'ফাঁকা ছক ও সূত্র', en: 'Blank grid + clues' },
+    layoutKey: { bn: 'উত্তরমালা', en: 'Answer key' },
+    layoutBoth: { bn: 'দুটিই (দুই পাতায়)', en: 'Both (two pages)' },
+    printNow: { bn: 'ছাপুন', en: 'Print' },
+    answerKey: { bn: 'উত্তরমালা', en: 'Answer key' },
+    printCredit: {
+        bn: 'অক্ষরখোপ দিয়ে তৈরি · শব্দতালিকা: kawshikbuet17/bengali-words (MIT)',
+        en: 'Made with Aksharkhop · Word list: kawshikbuet17/bengali-words (MIT)',
+    },
+    untitled: { bn: 'শব্দছক', en: 'Crossword' },
 } satisfies Record<string, Text | Text[]>;
 
 export const fmt = {
@@ -114,6 +172,22 @@ export const fmt = {
     listCoverage: (inList: number, complete: number): Text => ({
         bn: `সম্পূর্ণ ${bnN(complete)} শব্দের ${bnN(inList)}টি শব্দতালিকায়`,
         en: `${inList} of ${complete} complete words are in the word list`,
+    }),
+    clueSummary: (answered: number, clued: number, total: number): Text => ({
+        bn: `${bnN(answered)}/${bnN(total)} শব্দে উত্তর · ${bnN(clued)}/${bnN(total)} শব্দে সূত্র`,
+        en: `${answered}/${total} words have an answer · ${clued}/${total} have a clue`,
+    }),
+    giveaways: (n: number): Text => ({
+        bn: `${bnN(n)}টি সূত্রে উত্তরটিই লেখা আছে`,
+        en: `${n} clue${n === 1 ? '' : 's'} contain${n === 1 ? 's' : ''} the answer`,
+    }),
+    clueLabel: (dir: 'across' | 'down', n: number): Text => ({
+        bn: `${dir === 'across' ? 'পাশাপাশি' : 'উপর-নিচ'} ${bnN(n)}-এর সূত্র`,
+        en: `Clue for ${dir === 'across' ? 'across' : 'down'} ${n}`,
+    }),
+    adminSize: (rows: number, cols: number): Text => ({
+        bn: `${bnN(rows)} সারি × ${bnN(cols)} কলাম`,
+        en: `${rows} rows × ${cols} columns`,
     }),
 };
 

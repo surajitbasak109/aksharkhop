@@ -3,13 +3,14 @@ import {
     clearCell,
     conflicts as findConflicts,
     createPuzzle,
+    exportPataparbon,
     getCell,
     gridStats,
     isBlock,
     isSymmetric,
     normalize,
     numbering,
-    parsePuzzle,
+    parseAnyPuzzle,
     phoneticToBengali,
     placeAnswer,
     previewAnswer,
@@ -20,6 +21,7 @@ import {
     slots as allSlots,
     toggleBlock,
     type Direction,
+    type ExportResult,
     type Grid,
     type Message,
     type PreviewState,
@@ -27,10 +29,14 @@ import {
 } from '@aksharkhop/core';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type KeyboardEvent } from 'react';
 import { Board, show } from './Board.tsx';
+import { CluePanel } from './CluePanel.tsx';
+import { ExportDialog } from './ExportDialog.tsx';
 import { historyReducer } from './history.ts';
 import { fmt, plain, ui, type Text } from './i18n.ts';
 import { NewPuzzleDialog } from './NewPuzzleDialog.tsx';
 import { PhoneticHelp } from './PhoneticHelp.tsx';
+import { PrintDialog } from './PrintDialog.tsx';
+import { PrintSheet, type PrintLayout } from './PrintSheet.tsx';
 import { loadDraft, loadPhonetic, saveDraft, savePhonetic } from './storage.ts';
 import { T } from './T.tsx';
 import { useWordList } from './wordList.ts';
@@ -56,12 +62,12 @@ function pickDir(grid: Grid, r: number, c: number, dir: Direction): Direction {
     return other(dir);
 }
 
-function downloadName(title: string): string {
+function downloadName(title: string, fallback = 'aksharkhop'): string {
     const base =
         title
             .trim()
             .replace(/[\\/:*?"<>|]+/g, '')
-            .replace(/\s+/g, '-') || 'aksharkhop';
+            .replace(/\s+/g, '-') || fallback;
     const d = new Date();
     const pad = (n: number) => String(n).padStart(2, '0');
     return `${base}-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}.json`;
@@ -82,6 +88,9 @@ export function App() {
     const [phonetic, setPhonetic] = useState(loadPhonetic);
     const [notice, setNotice] = useState<Notice | null>(null);
     const [showNew, setShowNew] = useState(false);
+    const [exported, setExported] = useState<ExportResult | null>(null);
+    const [showPrint, setShowPrint] = useState(false);
+    const [printLayout, setPrintLayout] = useState<PrintLayout>('puzzle');
     const boardRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const fileRef = useRef<HTMLInputElement>(null);
@@ -308,7 +317,7 @@ export function App() {
 
     const onImport = async (file: File | undefined) => {
         if (!file) return;
-        const parsed = parsePuzzle(await file.text());
+        const parsed = parseAnyPuzzle(await file.text());
         if (fileRef.current) fileRef.current.value = '';
         if (!parsed.ok) {
             setNotice({ kind: 'error', title: ui.importFailed, lines: parsed.errors });
@@ -316,7 +325,31 @@ export function App() {
         }
         if (hasContent(puzzle) && !window.confirm(plain(ui.replaceConfirm))) return;
         load(parsed.puzzle);
-        setNotice({ kind: 'ok', title: ui.imported, lines: [] });
+        setNotice({
+            kind: 'ok',
+            title: parsed.format === 'pataparbon' ? ui.importedPataparbon : ui.imported,
+            lines: [],
+        });
+    };
+
+    const onExportPataparbon = () => setExported(exportPataparbon(puzzle));
+
+    const onPrint = () => {
+        setShowPrint(false);
+        // Let the dialog close and the sheet render before the browser takes its snapshot.
+        setTimeout(() => window.print(), 100);
+    };
+
+    const onClue = (key: string, text: string) => {
+        const clues = { ...puzzle.clues };
+        if (text.trim() === '') delete clues[key];
+        else clues[key] = text;
+        meta({ clues });
+    };
+
+    const onSelectClue = (d: Direction, sr: number, sc: number, focus: boolean) => {
+        setSel({ r: sr, c: sc, dir: d });
+        if (focus) focusBoard();
     };
 
     const meta = (change: Partial<Puzzle>) => dispatch({ type: 'meta', puzzle: { ...puzzle, ...change } });
@@ -333,282 +366,328 @@ export function App() {
                   : ui.notInList;
 
     return (
-        <div className="app">
-            <header className="top">
-                <div className="brand">
-                    <h1>
-                        <T t={ui.appName} />
-                    </h1>
-                    <p className="tagline">
-                        <T t={ui.tagline} />
-                    </p>
-                </div>
-                <div className="meta">
-                    <label>
-                        <T t={ui.title} />
-                        <input value={puzzle.title} onChange={(e) => meta({ title: e.target.value })} />
-                    </label>
-                    <label>
-                        <T t={ui.author} />
-                        <input value={puzzle.author} onChange={(e) => meta({ author: e.target.value })} />
-                    </label>
-                </div>
-            </header>
-
-            <nav className="toolbar" aria-label="Toolbar">
-                <button onClick={() => setShowNew(true)}>
-                    <T t={ui.newPuzzle} />
-                </button>
-                <button onClick={() => fileRef.current?.click()}>
-                    <T t={ui.importFile} />
-                </button>
-                <input
-                    ref={fileRef}
-                    type="file"
-                    accept=".json,application/json"
-                    hidden
-                    onChange={(e) => void onImport(e.target.files?.[0])}
-                />
-                <button onClick={onExport}>
-                    <T t={ui.exportFile} />
-                </button>
-                <span className="sep" />
-                <button onClick={() => dispatch({ type: 'undo' })} disabled={history.past.length === 0}>
-                    <T t={ui.undo} />
-                </button>
-                <button onClick={() => dispatch({ type: 'redo' })} disabled={history.future.length === 0}>
-                    <T t={ui.redo} />
-                </button>
-                <span className="sep" />
-                <span className="mode" role="group" aria-label={plain(ui.modeLabel)}>
-                    <span className="mode-label">
-                        <T t={ui.modeLabel} />
-                    </span>
-                    <button aria-pressed={!blockMode} onClick={() => setBlockMode(false)}>
-                        <T t={ui.modeLetters} />
-                    </button>
-                    <button aria-pressed={blockMode} onClick={() => setBlockMode(true)}>
-                        <T t={ui.modeBlocks} />
-                    </button>
-                </span>
-                <label className="check">
-                    <input
-                        type="checkbox"
-                        checked={puzzle.symmetry}
-                        onChange={(e) => meta({ symmetry: e.target.checked })}
-                    />
-                    <T t={ui.symmetry} />
-                </label>
-                <span className="size-tag">
-                    <T t={fmt.size(grid.rows, grid.cols)} />
-                </span>
-            </nav>
-
-            {notice && (
-                <div className={`notice ${notice.kind}`} role={notice.kind === 'error' ? 'alert' : 'status'}>
-                    <strong>
-                        <T t={notice.title} />
-                    </strong>
-                    {notice.lines.length > 0 && (
-                        <ul>
-                            {notice.lines.map((m, i) => (
-                                <li key={i}>
-                                    <T t={m} />
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                    <button className="link" onClick={() => setNotice(null)} aria-label="Close">
-                        ×
-                    </button>
-                </div>
-            )}
-
-            <main className="workspace">
-                <section className="board-wrap">
-                    <Board
-                        ref={boardRef}
-                        grid={grid}
-                        numbers={num.numbers}
-                        selected={{ r, c }}
-                        slotCells={inSlot}
-                        preview={preview}
-                        blockMode={blockMode}
-                        onCellClick={onCellClick}
-                        onKeyDown={onBoardKey}
-                    />
-                </section>
-
-                <aside className="side">
-                    <section className="panel answer">
-                        <h2>
-                            {slot ? (
-                                <T t={fmt.slotLabel(slot.dir, slot.n, slot.len)} />
-                            ) : isBlock(grid, r, c) ? (
-                                <T t={ui.blockSelected} />
-                            ) : (
-                                <T t={ui.noSlot} />
-                            )}
-                        </h2>
-                        <div className="answer-row">
-                            <input
-                                ref={inputRef}
-                                className="answer-input"
-                                lang="bn"
-                                value={draft}
-                                disabled={!slot}
-                                placeholder={plain(ui.answerPlaceholder)}
-                                aria-label={plain(ui.answerPlaceholder)}
-                                aria-invalid={typing && check ? !check.ok : undefined}
-                                onChange={(e) => setDraft(e.target.value)}
-                                onKeyDown={onAnswerKey}
-                            />
-                            <button onClick={commit} disabled={!slot || !check?.ok || typed === ''}>
-                                <T t={ui.place} />
-                            </button>
-                            <button
-                                onClick={clearSlot}
-                                disabled={!slot || currentLetters.every((l) => l === '')}
-                            >
-                                <T t={ui.clearSlot} />
-                            </button>
-                        </div>
-                        <label className="check phonetic-toggle">
-                            <input
-                                type="checkbox"
-                                checked={phonetic}
-                                onChange={(e) => {
-                                    setPhonetic(e.target.checked);
-                                    savePhonetic(e.target.checked);
-                                    inputRef.current?.focus();
-                                }}
-                            />
-                            <T t={ui.phonetic} />
+        <>
+            <div className="app">
+                <header className="top">
+                    <div className="brand">
+                        <h1>
+                            <T t={ui.appName} />
+                        </h1>
+                        <p className="tagline">
+                            <T t={ui.tagline} />
+                        </p>
+                    </div>
+                    <div className="meta">
+                        <label>
+                            <T t={ui.title} />
+                            <input value={puzzle.title} onChange={(e) => meta({ title: e.target.value })} />
                         </label>
-                        {phonetic && typed !== '' && typed !== normalize(draft) && (
-                            <p className="converted" lang="bn" aria-live="polite">
-                                {typed}
-                            </p>
-                        )}
-                        {slot && check && typed !== '' && (
-                            <div className="cells-preview" aria-live="polite">
-                                {check.cells.map((cell, i) => (
-                                    <span key={i} className={i >= slot.len ? 'chip over' : 'chip'}>
-                                        {show(cell)}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
-                        {typing && check && !check.ok && (
-                            <ul className="errors">
-                                {check.errors.map((m) => (
-                                    <li key={m.code}>
+                        <label>
+                            <T t={ui.author} />
+                            <input value={puzzle.author} onChange={(e) => meta({ author: e.target.value })} />
+                        </label>
+                    </div>
+                </header>
+
+                <nav className="toolbar" aria-label="Toolbar">
+                    <button onClick={() => setShowNew(true)}>
+                        <T t={ui.newPuzzle} />
+                    </button>
+                    <button onClick={() => fileRef.current?.click()}>
+                        <T t={ui.importFile} />
+                    </button>
+                    <input
+                        ref={fileRef}
+                        type="file"
+                        accept=".json,application/json"
+                        hidden
+                        onChange={(e) => void onImport(e.target.files?.[0])}
+                    />
+                    <button onClick={onExport}>
+                        <T t={ui.exportFile} />
+                    </button>
+                    <button onClick={onExportPataparbon}>
+                        <T t={ui.exportPataparbon} />
+                    </button>
+                    <button onClick={() => setShowPrint(true)}>
+                        <T t={ui.print} />
+                    </button>
+                    <span className="sep" />
+                    <button onClick={() => dispatch({ type: 'undo' })} disabled={history.past.length === 0}>
+                        <T t={ui.undo} />
+                    </button>
+                    <button onClick={() => dispatch({ type: 'redo' })} disabled={history.future.length === 0}>
+                        <T t={ui.redo} />
+                    </button>
+                    <span className="sep" />
+                    <span className="mode" role="group" aria-label={plain(ui.modeLabel)}>
+                        <span className="mode-label">
+                            <T t={ui.modeLabel} />
+                        </span>
+                        <button aria-pressed={!blockMode} onClick={() => setBlockMode(false)}>
+                            <T t={ui.modeLetters} />
+                        </button>
+                        <button aria-pressed={blockMode} onClick={() => setBlockMode(true)}>
+                            <T t={ui.modeBlocks} />
+                        </button>
+                    </span>
+                    <label className="check">
+                        <input
+                            type="checkbox"
+                            checked={puzzle.symmetry}
+                            onChange={(e) => meta({ symmetry: e.target.checked })}
+                        />
+                        <T t={ui.symmetry} />
+                    </label>
+                    <span className="size-tag">
+                        <T t={fmt.size(grid.rows, grid.cols)} />
+                    </span>
+                </nav>
+
+                {notice && (
+                    <div
+                        className={`notice ${notice.kind}`}
+                        role={notice.kind === 'error' ? 'alert' : 'status'}
+                    >
+                        <strong>
+                            <T t={notice.title} />
+                        </strong>
+                        {notice.lines.length > 0 && (
+                            <ul>
+                                {notice.lines.map((m, i) => (
+                                    <li key={i}>
                                         <T t={m} />
                                     </li>
                                 ))}
                             </ul>
                         )}
-                        {!phonetic && typing && check && !check.ok && check.errors.some((m) => m.code === 'latin') && (
-                            <p className="hint">
-                                <T t={ui.tryPhonetic} />
-                            </p>
-                        )}
-                        {typing && check?.ok && willConflict && (
-                            <p className="warn">
-                                <T t={ui.willConflict} />
-                            </p>
-                        )}
-                        {listHint && (
-                            <p className={listHint === ui.inList ? 'hint good' : 'hint'}>
-                                <T t={listHint} />
-                            </p>
-                        )}
-                        {phonetic && <PhoneticHelp />}
+                        <button className="link" onClick={() => setNotice(null)} aria-label="Close">
+                            ×
+                        </button>
+                    </div>
+                )}
+
+                <main className="workspace">
+                    <section className="board-wrap">
+                        <Board
+                            ref={boardRef}
+                            grid={grid}
+                            numbers={num.numbers}
+                            selected={{ r, c }}
+                            slotCells={inSlot}
+                            preview={preview}
+                            blockMode={blockMode}
+                            onCellClick={onCellClick}
+                            onKeyDown={onBoardKey}
+                        />
                     </section>
 
-                    <section className="panel">
-                        <h2>
-                            <T t={ui.conflicts} />
-                        </h2>
-                        {conflictList.length === 0 ? (
-                            <p className="muted">
-                                <T t={ui.noConflicts} />
-                            </p>
-                        ) : (
-                            <ul className="conflict-list">
-                                {conflictList.map((x) => (
-                                    <li key={`${x.r}:${x.c}`}>
-                                        <button
-                                            className="link"
-                                            onClick={() => {
-                                                select(x.r, x.c);
-                                                focusBoard();
-                                            }}
-                                        >
-                                            <T t={fmt.cellAt(x.r, x.c)} />
-                                        </button>{' '}
-                                        <span className="pair">
-                                            {ui.across.bn} <b>{x.across}</b> · {ui.down.bn} <b>{x.down}</b>
+                    <aside className="side">
+                        <section className="panel answer">
+                            <h2>
+                                {slot ? (
+                                    <T t={fmt.slotLabel(slot.dir, slot.n, slot.len)} />
+                                ) : isBlock(grid, r, c) ? (
+                                    <T t={ui.blockSelected} />
+                                ) : (
+                                    <T t={ui.noSlot} />
+                                )}
+                            </h2>
+                            <div className="answer-row">
+                                <input
+                                    ref={inputRef}
+                                    className="answer-input"
+                                    lang="bn"
+                                    value={draft}
+                                    disabled={!slot}
+                                    placeholder={plain(ui.answerPlaceholder)}
+                                    aria-label={plain(ui.answerPlaceholder)}
+                                    aria-invalid={typing && check ? !check.ok : undefined}
+                                    onChange={(e) => setDraft(e.target.value)}
+                                    onKeyDown={onAnswerKey}
+                                />
+                                <button onClick={commit} disabled={!slot || !check?.ok || typed === ''}>
+                                    <T t={ui.place} />
+                                </button>
+                                <button
+                                    onClick={clearSlot}
+                                    disabled={!slot || currentLetters.every((l) => l === '')}
+                                >
+                                    <T t={ui.clearSlot} />
+                                </button>
+                            </div>
+                            <label className="check phonetic-toggle">
+                                <input
+                                    type="checkbox"
+                                    checked={phonetic}
+                                    onChange={(e) => {
+                                        setPhonetic(e.target.checked);
+                                        savePhonetic(e.target.checked);
+                                        inputRef.current?.focus();
+                                    }}
+                                />
+                                <T t={ui.phonetic} />
+                            </label>
+                            {phonetic && typed !== '' && typed !== normalize(draft) && (
+                                <p className="converted" lang="bn" aria-live="polite">
+                                    {typed}
+                                </p>
+                            )}
+                            {slot && check && typed !== '' && (
+                                <div className="cells-preview" aria-live="polite">
+                                    {check.cells.map((cell, i) => (
+                                        <span key={i} className={i >= slot.len ? 'chip over' : 'chip'}>
+                                            {show(cell)}
                                         </span>
+                                    ))}
+                                </div>
+                            )}
+                            {typing && check && !check.ok && (
+                                <ul className="errors">
+                                    {check.errors.map((m) => (
+                                        <li key={m.code}>
+                                            <T t={m} />
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            {!phonetic &&
+                                typing &&
+                                check &&
+                                !check.ok &&
+                                check.errors.some((m) => m.code === 'latin') && (
+                                    <p className="hint">
+                                        <T t={ui.tryPhonetic} />
+                                    </p>
+                                )}
+                            {typing && check?.ok && willConflict && (
+                                <p className="warn">
+                                    <T t={ui.willConflict} />
+                                </p>
+                            )}
+                            {listHint && (
+                                <p className={listHint === ui.inList ? 'hint good' : 'hint'}>
+                                    <T t={listHint} />
+                                </p>
+                            )}
+                            {phonetic && <PhoneticHelp />}
+                        </section>
+
+                        <section className="panel">
+                            <h2>
+                                <T t={ui.conflicts} />
+                            </h2>
+                            {conflictList.length === 0 ? (
+                                <p className="muted">
+                                    <T t={ui.noConflicts} />
+                                </p>
+                            ) : (
+                                <ul className="conflict-list">
+                                    {conflictList.map((x) => (
+                                        <li key={`${x.r}:${x.c}`}>
+                                            <button
+                                                className="link"
+                                                onClick={() => {
+                                                    select(x.r, x.c);
+                                                    focusBoard();
+                                                }}
+                                            >
+                                                <T t={fmt.cellAt(x.r, x.c)} />
+                                            </button>{' '}
+                                            <span className="pair">
+                                                {ui.across.bn} <b>{x.across}</b> · {ui.down.bn}{' '}
+                                                <b>{x.down}</b>
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                            {!symmetricOk && (
+                                <p className="warn">
+                                    <T t={ui.notSymmetric} />
+                                </p>
+                            )}
+                        </section>
+
+                        <section className="panel">
+                            <h2>
+                                <T t={ui.stats} />
+                            </h2>
+                            <p>
+                                <T t={fmt.stats(stats.white, stats.filled, stats.blocks, slotCount)} />
+                            </p>
+                            {coverage && coverage.complete > 0 && (
+                                <p>
+                                    <T t={fmt.listCoverage(coverage.inList, coverage.complete)} />
+                                </p>
+                            )}
+                            <p className="muted small">
+                                <T t={ui.savedLocally} />
+                            </p>
+                        </section>
+
+                        <section className="panel keys">
+                            <h2>
+                                <T t={ui.keys} />
+                            </h2>
+                            <ul>
+                                {[
+                                    ui.keyArrows,
+                                    ui.keyTab,
+                                    ui.keySpace,
+                                    ui.keyEnter,
+                                    ui.keyDelete,
+                                    ui.keyEsc,
+                                    ui.keyUndo,
+                                ].map((k) => (
+                                    <li key={k.en}>
+                                        <T t={k} />
                                     </li>
                                 ))}
                             </ul>
-                        )}
-                        {!symmetricOk && (
-                            <p className="warn">
-                                <T t={ui.notSymmetric} />
-                            </p>
-                        )}
-                    </section>
+                        </section>
+                    </aside>
+                </main>
 
-                    <section className="panel">
-                        <h2>
-                            <T t={ui.stats} />
-                        </h2>
-                        <p>
-                            <T t={fmt.stats(stats.white, stats.filled, stats.blocks, slotCount)} />
-                        </p>
-                        {coverage && coverage.complete > 0 && (
-                            <p>
-                                <T t={fmt.listCoverage(coverage.inList, coverage.complete)} />
-                            </p>
-                        )}
-                        <p className="muted small">
-                            <T t={ui.savedLocally} />
-                        </p>
-                    </section>
-
-                    <section className="panel keys">
-                        <h2>
-                            <T t={ui.keys} />
-                        </h2>
-                        <ul>
-                            {[
-                                ui.keyArrows,
-                                ui.keyTab,
-                                ui.keySpace,
-                                ui.keyEnter,
-                                ui.keyDelete,
-                                ui.keyEsc,
-                                ui.keyUndo,
-                            ].map((k) => (
-                                <li key={k.en}>
-                                    <T t={k} />
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
-                </aside>
-            </main>
-
-            {showNew && (
-                <NewPuzzleDialog
-                    rows={grid.rows}
-                    cols={grid.cols}
-                    onCreate={onNew}
-                    onCancel={() => setShowNew(false)}
+                <CluePanel
+                    puzzle={puzzle}
+                    selected={slot ? { dir: slot.dir, r: slot.r, c: slot.c } : null}
+                    phonetic={phonetic}
+                    onPhonetic={(on) => {
+                        setPhonetic(on);
+                        savePhonetic(on);
+                    }}
+                    onSelect={onSelectClue}
+                    onClue={onClue}
                 />
-            )}
-        </div>
+
+                {showNew && (
+                    <NewPuzzleDialog
+                        rows={grid.rows}
+                        cols={grid.cols}
+                        onCreate={onNew}
+                        onCancel={() => setShowNew(false)}
+                    />
+                )}
+                {exported && (
+                    <ExportDialog
+                        result={exported}
+                        rows={grid.rows}
+                        cols={grid.cols}
+                        fileName={downloadName(puzzle.title, 'shobdochhok')}
+                        onClose={() => setExported(null)}
+                    />
+                )}
+                {showPrint && (
+                    <PrintDialog
+                        layout={printLayout}
+                        onLayout={setPrintLayout}
+                        onPrint={onPrint}
+                        onClose={() => setShowPrint(false)}
+                    />
+                )}
+            </div>
+            <PrintSheet puzzle={puzzle} layout={printLayout} />
+        </>
     );
 }

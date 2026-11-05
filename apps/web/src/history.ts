@@ -11,7 +11,7 @@ export interface History {
 
 export type HistoryAction =
     | { type: 'apply'; puzzle: Puzzle }
-    | { type: 'meta'; puzzle: Puzzle } // title, author, symmetry: changes the present, no undo step
+    | { type: 'meta'; puzzle: Puzzle } // title, author, clues, symmetry: changes the present, no undo step
     | { type: 'load'; puzzle: Puzzle } // new or opened puzzle: starts a fresh history
     | { type: 'undo' }
     | { type: 'redo' };
@@ -40,7 +40,13 @@ export function historyReducer(h: History, action: HistoryAction): History {
     }
 }
 
-/** Undo and redo step through grid edits only: title, author and the symmetry setting stay as they are. */
+/** Undo and redo step through grid edits only: title, author, clues and the symmetry setting stay as they are. */
 function keepMeta(snapshot: Puzzle, current: Puzzle): Puzzle {
-    return { ...snapshot, title: current.title, author: current.author, symmetry: current.symmetry };
+    return {
+        ...snapshot,
+        title: current.title,
+        author: current.author,
+        symmetry: current.symmetry,
+        clues: current.clues,
+    };
 }
