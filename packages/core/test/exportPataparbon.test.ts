@@ -11,10 +11,7 @@ import {
 } from '../src/exportPataparbon.ts';
 import { clueKey, serializePuzzle, type Puzzle } from '../src/puzzle.ts';
 
-const exampleText = readFileSync(
-    new URL('../../../.claude/examples/pataparbon-export.json', import.meta.url),
-    'utf8',
-);
+const exampleText = readFileSync(new URL('fixtures/pataparbon-export.json', import.meta.url), 'utf8');
 const example = JSON.parse(exampleText) as PataparbonExport;
 
 function examplePuzzle(): Puzzle {

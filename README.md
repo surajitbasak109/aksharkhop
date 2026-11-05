@@ -3,8 +3,8 @@
 A Bengali crossword builder: one akshara per cell, with export to the Pataparbon app.
 
 Status: Phases 0–6 and 8 done (editor, clues, print, Pataparbon export, word suggestions, auto-fill, solver and
-share links, landing page, Vercel setup). Phase 7 (AI clue drafting) is optional and not started. See
-`.claude/PROGRESS.md`.
+share links, landing page, Vercel setup). Phase 7 (AI clue drafting) is optional and not started. See the
+[Pataparbon export format](docs/pataparbon-export-format.md).
 
 ```bash
 pnpm install

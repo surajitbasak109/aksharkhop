@@ -7,7 +7,7 @@ Read these first, in order:
 1. `.claude/PLAN.md`: goal, hard rules, tech stack
 2. `.claude/PHASES.md`: phases, tasks and subtasks (IDs like `P1.3.2`)
 3. `.claude/PROGRESS.md`: current status, decisions, session log. **Update it at the end of every session.**
-4. `.claude/EXPORT-FORMAT.md`: the Pataparbon export format
+4. `docs/pataparbon-export-format.md`: the Pataparbon export format
 
 Rules that are easy to break:
 

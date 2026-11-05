@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { numberGrid } from '../src/numbering.ts';
 
 const example = JSON.parse(
-    readFileSync(new URL('../../../.claude/examples/pataparbon-export.json', import.meta.url), 'utf8'),
+    readFileSync(new URL('fixtures/pataparbon-export.json', import.meta.url), 'utf8'),
 ) as {
     grid: { cells: { b?: number; s?: string }[][] };
     clues: Record<'across' | 'down', { n: number; r: number; c: number; len: number }[]>;

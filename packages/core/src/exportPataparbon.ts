@@ -1,4 +1,4 @@
-// Export to, and import from, the Pataparbon crossword JSON (see .claude/EXPORT-FORMAT.md).
+// Export to, and import from, the Pataparbon crossword JSON (see docs/pataparbon-export-format.md).
 //
 // `validatePataparbon` mirrors pataparbon app/Services/Crossword/CrosswordValidator.php, rule for rule
 // and with the same codes and wording (Bengali digits in the Bengali text). Pataparbon is the source of

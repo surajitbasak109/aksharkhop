@@ -16,10 +16,7 @@ import {
     type SolvePuzzle,
 } from '../src/share.ts';
 
-const exampleText = readFileSync(
-    new URL('../../../.claude/examples/pataparbon-export.json', import.meta.url),
-    'utf8',
-);
+const exampleText = readFileSync(new URL('fixtures/pataparbon-export.json', import.meta.url), 'utf8');
 
 function examplePuzzle(): Puzzle {
     const r = importPataparbon(exampleText);

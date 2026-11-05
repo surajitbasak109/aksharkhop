@@ -10,3 +10,5 @@ data/processed/
 public/words.bn.json
 # Puzzles saved from the editor (human decision 2026-11-05)
 data/saved/
+# Planning notes, the progress log and agent settings (kept on disk, not published)
+.claude/
