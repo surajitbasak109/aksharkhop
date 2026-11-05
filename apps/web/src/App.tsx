@@ -31,13 +31,24 @@ import { useCallback, useEffect, useMemo, useReducer, useRef, useState, type Key
 import { Board, show } from './Board.tsx';
 import { CluePanel } from './CluePanel.tsx';
 import { ExportDialog } from './ExportDialog.tsx';
+import { useFillClient } from './fillClient.ts';
+import { FillPanel } from './FillPanel.tsx';
 import { historyReducer } from './history.ts';
 import { fmt, plain, ui, type Text } from './i18n.ts';
 import { NewPuzzleDialog } from './NewPuzzleDialog.tsx';
 import { PhoneticHelp } from './PhoneticHelp.tsx';
 import { PrintDialog } from './PrintDialog.tsx';
 import { PrintSheet, type PrintLayout } from './PrintSheet.tsx';
-import { loadDraft, loadPhonetic, saveDraft, savePhonetic } from './storage.ts';
+import { SuggestPanel } from './SuggestPanel.tsx';
+import {
+    loadDraft,
+    loadFillSettings,
+    loadPhonetic,
+    saveDraft,
+    saveFillSettings,
+    savePhonetic,
+    type FillSettings,
+} from './storage.ts';
 import { T } from './T.tsx';
 import { useWordList } from './wordList.ts';
 
@@ -95,6 +106,8 @@ export function App() {
     const inputRef = useRef<HTMLInputElement>(null);
     const fileRef = useRef<HTMLInputElement>(null);
     const words = useWordList();
+    const { client: fillClient, status: fillStatus } = useFillClient();
+    const [fillSettings, setFillSettings] = useState(loadFillSettings);
 
     useEffect(() => saveDraft(puzzle), [puzzle]);
 
@@ -352,6 +365,17 @@ export function App() {
         if (focus) focusBoard();
     };
 
+    const changeFillSettings = (next: FillSettings) => {
+        setFillSettings(next);
+        saveFillSettings(next);
+    };
+
+    const pickSuggestion = (cells: string[]) => {
+        if (!slot) return;
+        apply(placeAnswer(grid, slot, cells));
+        setDraft(cells.join(''));
+    };
+
     const meta = (change: Partial<Puzzle>) => dispatch({ type: 'meta', puzzle: { ...puzzle, ...change } });
 
     const listHint =
@@ -572,6 +596,31 @@ export function App() {
                             )}
                             {phonetic && <PhoneticHelp />}
                         </section>
+
+                        <SuggestPanel
+                            grid={grid}
+                            slot={slot}
+                            client={fillClient}
+                            status={fillStatus}
+                            settings={fillSettings}
+                            onPick={pickSuggestion}
+                            onBlock={(w) =>
+                                changeFillSettings({
+                                    ...fillSettings,
+                                    blocked: [...new Set([...fillSettings.blocked, w])],
+                                })
+                            }
+                        />
+
+                        <FillPanel
+                            grid={grid}
+                            client={fillClient}
+                            status={fillStatus}
+                            settings={fillSettings}
+                            onSettings={changeFillSettings}
+                            onApply={apply}
+                            onSelectSlot={(d, sr, sc) => onSelectClue(d, sr, sc, true)}
+                        />
 
                         <section className="panel">
                             <h2>

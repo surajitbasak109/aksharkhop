@@ -671,3 +671,79 @@ button.link {
         color: #444;
     }
 }
+
+/* Suggestions and auto-fill */
+.suggest-list {
+    list-style: none;
+    margin: 6px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+.suggest-list li {
+    display: inline-flex;
+}
+.suggest-word {
+    border-radius: 6px 0 0 6px;
+    font-size: 16px;
+    padding: 2px 8px;
+}
+.suggest-block {
+    border-radius: 0 6px 6px 0;
+    border-left: none;
+    padding: 2px 6px;
+    color: var(--muted);
+}
+.fill-actions {
+    margin: 8px 0;
+}
+.fill-options .field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 8px 0 4px;
+    font-size: 13px;
+}
+.fill-options input[type='range'] {
+    width: 100%;
+}
+.fill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.fill-row .field input,
+.fill-row .field select {
+    width: 120px;
+}
+select {
+    font: inherit;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 5px 8px;
+}
+.blocklist {
+    margin-top: 10px;
+}
+.blocklist textarea {
+    width: 100%;
+    font: inherit;
+    color: inherit;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 5px 8px;
+}
+.blocked-slots {
+    margin: 4px 0;
+    padding-left: 18px;
+}
+.pattern {
+    margin-left: 8px;
+    letter-spacing: 0.05em;
+}

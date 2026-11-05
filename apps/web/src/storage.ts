@@ -40,3 +40,35 @@ export function savePhonetic(on: boolean): void {
         // Not fatal.
     }
 }
+
+const FILL_KEY = 'aksharkhop.fill.v1';
+
+export interface FillSettings {
+    /** Only words with at least this frequency score; 0 allows every word. */
+    minFreq: number;
+    /** Words that are never suggested or used by auto-fill. */
+    blocked: string[];
+}
+
+export const DEFAULT_FILL_SETTINGS: FillSettings = { minFreq: 0, blocked: [] };
+
+export function loadFillSettings(): FillSettings {
+    try {
+        const data = JSON.parse(
+            window.localStorage.getItem(FILL_KEY) ?? 'null',
+        ) as Partial<FillSettings> | null;
+        const minFreq = typeof data?.minFreq === 'number' ? Math.min(1, Math.max(0, data.minFreq)) : 0;
+        const blocked = Array.isArray(data?.blocked) ? data.blocked.filter((w) => typeof w === 'string') : [];
+        return { minFreq, blocked };
+    } catch {
+        return DEFAULT_FILL_SETTINGS;
+    }
+}
+
+export function saveFillSettings(s: FillSettings): void {
+    try {
+        window.localStorage.setItem(FILL_KEY, JSON.stringify(s));
+    } catch {
+        // Not fatal.
+    }
+}

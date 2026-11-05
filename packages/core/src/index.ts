@@ -9,3 +9,6 @@ export { formatJson } from './json.ts';
 export { phoneticToBengali, PHONETIC_TABLE } from './phonetic.ts';
 export * from './clues.ts';
 export * from './exportPataparbon.ts';
+export * from './wordIndex.ts';
+export * from './autofill.ts';
+export * from './suggest.ts';

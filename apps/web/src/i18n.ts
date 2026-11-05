@@ -153,7 +153,84 @@ export const ui = {
         en: 'Made with Aksharkhop · Word list: kawshikbuet17/bengali-words (MIT)',
     },
     untitled: { bn: 'শব্দছক', en: 'Crossword' },
+    suggest: { bn: 'শব্দের পরামর্শ', en: 'Word suggestions' },
+    suggestHelp: {
+        bn: 'ঘরের অক্ষরের সঙ্গে মেলে, আর আড়াআড়ি শব্দগুলোরও অন্তত একটি করে শব্দ থাকে। বেশি চেনা শব্দ আগে।',
+        en: 'Words that fit the letters and leave each crossing slot at least one word. Commonest first.',
+    },
+    suggestNone: { bn: 'কোনো শব্দ মেলেনি', en: 'No word fits' },
+    suggestPick: { bn: 'এটি বসান', en: 'Place this word' },
+    suggestBlock: { bn: 'এই শব্দ আর চাই না', en: 'Never suggest or use this word' },
+    suggestLoading: { bn: 'শব্দ খোঁজা হচ্ছে…', en: 'Looking…' },
+    suggestNoWordList: {
+        bn: 'শব্দতালিকা ছাড়া পরামর্শ দেওয়া যায় না',
+        en: 'Suggestions need the word list',
+    },
+    suggestSelect: {
+        bn: 'পরামর্শ পেতে ছকে একটি শব্দের ঘর বাছুন',
+        en: 'Select a word in the grid to get suggestions',
+    },
+
+    autofill: { bn: 'নিজে থেকে ভরা', en: 'Auto-fill' },
+    fillHelp: {
+        bn: 'ছকে আগে থেকে যে অক্ষর আছে সেগুলো থাকবে; বাকি ঘর শব্দতালিকা থেকে ভরা হবে, একই শব্দ দুবার নয়। ফল এক ধাপে পূর্বাবস্থায় ফেরানো যায়।',
+        en: 'Letters already in the grid stay; the other cells are filled from the word list, with no word used twice. The result is one undo step.',
+    },
+    fillRun: { bn: 'বাকিটা ভরুন', en: 'Fill the rest' },
+    fillStop: { bn: 'থামান', en: 'Stop' },
+    fillWorking: { bn: 'ভরা হচ্ছে…', en: 'Filling…' },
+    fillCommon: { bn: 'শুধু চেনা শব্দ (সর্বনিম্ন চলতি-মান)', en: 'Common words only (minimum frequency)' },
+    fillCommonHelp: {
+        bn: '০ হলে সব শব্দ, অচেনা সহ। বাড়ালে শুধু জানা চলতি-মানের শব্দ থাকে: তখন শব্দ কমে যায়, ভরা কঠিন হয়।',
+        en: '0 allows every word, rare ones too. Higher keeps only words with a known frequency, so there are fewer and filling is harder.',
+    },
+    fillTime: { bn: 'সময়সীমা', en: 'Time limit' },
+    fillSeed: { bn: 'সিড (একই সিডে একই ফল)', en: 'Seed (same seed, same result)' },
+    fillBlock: { bn: 'যে শব্দ কখনও বসবে না', en: 'Words never to use' },
+    fillBlockHelp: {
+        bn: 'প্রতি লাইনে একটি শব্দ। পরামর্শ ও নিজে-থেকে-ভরা, দুটোতেই বাদ যাবে। এই ব্রাউজারে সংরক্ষিত থাকে।',
+        en: 'One word per line. Left out of suggestions and auto-fill. Saved in this browser.',
+    },
+    fillNoWordList: {
+        bn: 'শব্দতালিকা পাওয়া যায়নি। python3 scripts/build_wordlist.py চালান।',
+        en: 'Word list not found. Run python3 scripts/build_wordlist.py.',
+    },
+    fillLoading: { bn: 'শব্দতালিকা আসছে…', en: 'Loading the word list…' },
+    fillSolvedNothing: {
+        bn: 'সব ঘর আগেই ভরা, ভরার কিছু নেই',
+        en: 'Every cell is already filled; nothing to fill',
+    },
+    fillStale: {
+        bn: 'ভরার সময় ছক বদলে গেছে, তাই ফল বসানো হয়নি। আবার চেষ্টা করুন।',
+        en: 'The grid changed while filling, so the result was not used. Try again.',
+    },
+    fillBlockedTitle: { bn: 'যে শব্দের ঘর আটকে আছে', en: 'Slots that hold it up' },
+    fillTried: { bn: 'আবার চেষ্টা: সিড বদলে গেছে', en: 'Try again: the seed has changed' },
 } satisfies Record<string, Text | Text[]>;
+
+const FAIL_TEXT: Record<string, Text> = {
+    no_candidates: {
+        bn: 'কোনো শব্দ মেলে না এমন ঘর আছে: অক্ষর বদলান বা কালো ঘর সরান',
+        en: 'A slot has no word that fits its letters: change a letter or move a block',
+    },
+    crossings: {
+        bn: 'আড়াআড়ি ঘরগুলোর সঙ্গে মেলে এমন শব্দ নেই এমন ঘর আছে',
+        en: 'A slot has no word that fits together with the slots it crosses',
+    },
+    exhausted: {
+        bn: 'সব রকম চেষ্টা করেও ভরা গেল না: এই ছকে, এই শব্দতালিকায় ভরার উপায় নেই। নিজের বসানো কোনো শব্দ মুছে আবার চেষ্টা করুন',
+        en: 'Every way was tried: this grid cannot be filled from this word list. Try clearing a word you typed',
+    },
+    timeout: {
+        bn: 'সময় শেষ, ভরা গেল না',
+        en: 'Time ran out before the grid was filled',
+    },
+    cancelled: { bn: 'থামানো হয়েছে', en: 'Stopped' },
+    conflicts: {
+        bn: 'ছকে অমিল আছে; আগে অমিলগুলো ঠিক করুন',
+        en: 'The grid has conflicts; fix them first',
+    },
+};
 
 export const fmt = {
     slotLabel: (dir: 'across' | 'down', n: number, len: number): Text => ({
@@ -184,6 +261,33 @@ export const fmt = {
     clueLabel: (dir: 'across' | 'down', n: number): Text => ({
         bn: `${dir === 'across' ? 'পাশাপাশি' : 'উপর-নিচ'} ${bnN(n)}-এর সূত্র`,
         en: `Clue for ${dir === 'across' ? 'across' : 'down'} ${n}`,
+    }),
+    fillProgress: (nodes: number, restarts: number, ms: number): Text => ({
+        bn: `${bnN(Math.round(ms / 100) / 10)} সেকেন্ড · ${bnN(nodes)}টি শব্দ চেষ্টা · ${bnN(restarts)} বার নতুন করে শুরু`,
+        en: `${(ms / 1000).toFixed(1)} s · ${nodes} words tried · ${restarts} restarts`,
+    }),
+    fillSolved: (count: number, ms: number, seed: number): Text => ({
+        bn: `${bnN(count)}টি শব্দ বসেছে (${bnN(Math.round(ms / 100) / 10)} সেকেন্ড, সিড ${bnN(seed)})`,
+        en: `Filled ${count} word${count === 1 ? '' : 's'} in ${(ms / 1000).toFixed(1)} s (seed ${seed})`,
+    }),
+    fillFailed: (reason: string, ms: number): Text => {
+        const t = FAIL_TEXT[reason] ?? FAIL_TEXT.exhausted!;
+        return {
+            bn: `${t.bn} (${bnN(Math.round(ms / 100) / 10)} সেকেন্ড)`,
+            en: `${t.en} (${(ms / 1000).toFixed(1)} s)`,
+        };
+    },
+    slotPattern: (dir: 'across' | 'down', n: number, len: number, candidates: number): Text => ({
+        bn: `${dir === 'across' ? 'পাশাপাশি' : 'উপর-নিচ'} ${bnN(n)} · ${bnN(len)} ঘর · মেলে ${bnN(candidates)}টি শব্দ`,
+        en: `${dir === 'across' ? 'Across' : 'Down'} ${n} · ${len} cells · ${candidates} words fit`,
+    }),
+    suggestCount: (shown: number, fitting: number): Text => ({
+        bn: `${bnN(fitting)}টি শব্দ মেলে; ${bnN(shown)}টি দেখানো হল`,
+        en: `${fitting} words fit; showing ${shown}`,
+    }),
+    usable: (n: number): Text => ({
+        bn: `এখন ${bnN(n)}টি শব্দ ব্যবহারযোগ্য`,
+        en: `${n} words usable now`,
     }),
     adminSize: (rows: number, cols: number): Text => ({
         bn: `${bnN(rows)} সারি × ${bnN(cols)} কলাম`,
