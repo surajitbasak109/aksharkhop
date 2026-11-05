@@ -1,5 +1,12 @@
 // Autosave of the current draft. Storage can be missing or full; every access is guarded.
-import { parsePuzzle, serializePuzzle, type Puzzle } from '@aksharkhop/core';
+import {
+    parsePuzzle,
+    restoreState,
+    serializePuzzle,
+    type Puzzle,
+    type SolvePuzzle,
+    type SolveState,
+} from '@aksharkhop/core';
 
 const KEY = 'aksharkhop.draft.v1';
 
@@ -70,5 +77,43 @@ export function saveFillSettings(s: FillSettings): void {
         window.localStorage.setItem(FILL_KEY, JSON.stringify(s));
     } catch {
         // Not fatal.
+    }
+}
+
+/** A short stable key for a share code, so a puzzle's progress is not stored under the whole long link. */
+function codeKey(code: string): string {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < code.length; i++) {
+        h ^= code.charCodeAt(i);
+        h = Math.imul(h, 0x01000193) >>> 0;
+    }
+    return `aksharkhop.solve.${code.length}.${h.toString(36)}`;
+}
+
+export interface SavedProgress {
+    state: SolveState;
+    seconds: number;
+}
+
+/** Progress saved for this puzzle in this browser, or null (none, or it does not fit the puzzle). */
+export function loadProgress(code: string, solve: SolvePuzzle): SavedProgress | null {
+    try {
+        const data = JSON.parse(window.localStorage.getItem(codeKey(code)) ?? 'null') as {
+            state?: unknown;
+            seconds?: unknown;
+        } | null;
+        const state = restoreState(solve, data?.state);
+        if (!state) return null;
+        return { state, seconds: typeof data?.seconds === 'number' && data.seconds >= 0 ? data.seconds : 0 };
+    } catch {
+        return null;
+    }
+}
+
+export function saveProgress(code: string, progress: SavedProgress): void {
+    try {
+        window.localStorage.setItem(codeKey(code), JSON.stringify(progress));
+    } catch {
+        // Not fatal: the puzzle can still be solved, just not resumed.
     }
 }

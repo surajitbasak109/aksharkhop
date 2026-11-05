@@ -12,3 +12,5 @@ export * from './exportPataparbon.ts';
 export * from './wordIndex.ts';
 export * from './autofill.ts';
 export * from './suggest.ts';
+export * from './share.ts';
+export * from './solve.ts';

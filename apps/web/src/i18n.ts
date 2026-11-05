@@ -206,6 +206,62 @@ export const ui = {
     },
     fillBlockedTitle: { bn: 'যে শব্দের ঘর আটকে আছে', en: 'Slots that hold it up' },
     fillTried: { bn: 'আবার চেষ্টা: সিড বদলে গেছে', en: 'Try again: the seed has changed' },
+    share: { bn: 'শেয়ার', en: 'Share' },
+    shareTitle: { bn: 'সমাধানের লিঙ্ক', en: 'Link to solve' },
+    shareHelp: {
+        bn: 'যে এই লিঙ্ক খুলবে সে নিজের ব্রাউজারেই শব্দছকটি সমাধান করতে পারবে। কোনো সার্ভার লাগে না।',
+        en: 'Anyone who opens this link can solve the crossword in their own browser. No server is needed.',
+    },
+    shareAnswers: {
+        bn: 'লিঙ্কের ভেতরে উত্তরও আছে (উত্তর যাচাই ব্রাউজারেই হয়), তাই লিঙ্কটি যে ডিকোড করবে সে উত্তর দেখতে পারবে।',
+        en: 'The answers are inside the link (checking happens in the browser), so anyone who decodes the link can read them.',
+    },
+    shareBad: { bn: 'এখনও লিঙ্ক বানানো যাবে না', en: 'Cannot make a link yet' },
+    shareBadHelp: {
+        bn: 'সমাধানের জন্য ছকটি পুরো ভরা আর প্রতিটি শব্দের সূত্র থাকতে হবে। নিচের সমস্যাগুলো ঠিক করুন।',
+        en: 'To solve it, the grid must be full and every word needs a clue. Fix these first.',
+    },
+    shareOpen: { bn: 'সমাধান পাতা খুলুন (নতুন ট্যাবে)', en: 'Open the solver (new tab)' },
+    shareMaking: { bn: 'লিঙ্ক বানানো হচ্ছে…', en: 'Making the link…' },
+    shareLinkLabel: { bn: 'লিঙ্ক', en: 'Link' },
+
+    solverTitle: { bn: 'শব্দছক সমাধান', en: 'Solve a crossword' },
+    solveLoading: { bn: 'শব্দছক খোলা হচ্ছে…', en: 'Opening the crossword…' },
+    solveFailed: { bn: 'শব্দছকটি খোলা গেল না', en: 'Could not open the crossword' },
+    solveFailedHelp: {
+        bn: 'লিঙ্কটি অসম্পূর্ণ বা ভুল হতে পারে। পুরো লিঙ্কটি আবার কপি করুন, অথবা ফাইল খুলুন।',
+        en: 'The link may be cut short or wrong. Copy the whole link again, or open a file.',
+    },
+    solveFileFailed: { bn: 'ফাইলটি সমাধানের জন্য খোলা গেল না', en: 'Could not open the file for solving' },
+    solveCopyLink: { bn: 'লিঙ্ক কপি', en: 'Copy link' },
+    solveMake: { bn: 'নিজের শব্দছক বানান', en: 'Make your own' },
+    solveOpenFile: { bn: 'ফাইল খুলুন', en: 'Open a file' },
+    timer: { bn: 'সময়', en: 'Time' },
+    currentClue: { bn: 'এই শব্দের সূত্র', en: 'Clue' },
+    solveAnswerHint: {
+        bn: 'পুরো শব্দ লিখলে শব্দের শুরু থেকে বসবে। কম লিখলে বাছা ঘর থেকে বসবে।',
+        en: 'A whole word fills the word from its start. Anything shorter fills from the selected cell.',
+    },
+    solveNoClue: { bn: 'একটি ঘর বাছুন', en: 'Select a cell' },
+    check: { bn: 'পরীক্ষা', en: 'Check' },
+    reveal: { bn: 'উত্তর দেখুন', en: 'Reveal' },
+    scopeCell: { bn: 'ঘর', en: 'Cell' },
+    scopeWord: { bn: 'শব্দ', en: 'Word' },
+    scopePuzzle: { bn: 'পুরো ছক', en: 'Puzzle' },
+    startOver: { bn: 'নতুন করে শুরু', en: 'Start over' },
+    startOverConfirm: {
+        bn: 'সব লেখা আর সময় মুছে নতুন করে শুরু হবে। চালিয়ে যাবেন?',
+        en: 'This clears everything you typed and the time. Continue?',
+    },
+    revealAllConfirm: {
+        bn: 'পুরো ছকের উত্তর দেখে নিলে সমাধানটি "সাহায্য নিয়ে" ধরা হবে। চালিয়ে যাবেন?',
+        en: 'Revealing the whole puzzle counts as solving it with help. Continue?',
+    },
+    allCorrect: { bn: 'যা লেখা হয়েছে সব ঠিক আছে', en: 'Everything typed so far is correct' },
+    solvedTitle: { bn: 'সমাধান হয়েছে!', en: 'Solved!' },
+    solvedHelped: { bn: 'কিছু উত্তর দেখে নেওয়া হয়েছে।', en: 'Some answers were revealed.' },
+    solveKeys: { bn: 'কিবোর্ড', en: 'Keyboard' },
+    solveClues: { bn: 'সূত্র', en: 'Clues' },
 } satisfies Record<string, Text | Text[]>;
 
 const FAIL_TEXT: Record<string, Text> = {
@@ -289,6 +345,23 @@ export const fmt = {
         bn: `এখন ${bnN(n)}টি শব্দ ব্যবহারযোগ্য`,
         en: `${n} words usable now`,
     }),
+    solveProgress: (filled: number, total: number): Text => ({
+        bn: `${bnN(filled)}/${bnN(total)} ঘর ভরা`,
+        en: `${filled}/${total} cells filled`,
+    }),
+    checkResult: (wrong: number, empty: number): Text => ({
+        bn: `${bnN(wrong)}টি ঘর ভুল · ${bnN(empty)}টি খালি`,
+        en: `${wrong} wrong · ${empty} empty`,
+    }),
+    tooLong: (left: number): Text => ({
+        bn: `এই শব্দে বাছা ঘর থেকে আর মাত্র ${bnN(left)}টি ঘর বাকি`,
+        en: `Only ${left} cell${left === 1 ? '' : 's'} left in this word from the selected cell`,
+    }),
+    linkLong: (n: number): Text => ({
+        bn: `লিঙ্কটি অনেক লম্বা (${bnN(n)} অক্ষর)। কিছু চ্যাট অ্যাপ এত লম্বা লিঙ্ক কেটে দিতে পারে।`,
+        en: `The link is very long (${n} characters). Some chat apps cut links this long.`,
+    }),
+    solveWord: (dir: 'across' | 'down', n: number, len: number): Text => fmt.slotLabel(dir, n, len),
     adminSize: (rows: number, cols: number): Text => ({
         bn: `${bnN(rows)} সারি × ${bnN(cols)} কলাম`,
         en: `${rows} rows × ${cols} columns`,

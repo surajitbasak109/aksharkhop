@@ -187,11 +187,17 @@ const BENGALI_ONLY = /^[ঀ-৿]+$/u;
 
 export type AnswerCheck = { ok: true; cells: string[] } | { ok: false; cells: string[]; errors: Message[] };
 
-/** Splits a typed answer into cells and checks it fits a slot of `len` cells. '' is allowed (clears). */
-export function checkAnswer(text: string, len: number): AnswerCheck {
+export interface TypedCheck {
+    cells: string[];
+    /** Problems with the text itself (not Latin, stray vowel sign, ...). Empty when the text is fine. */
+    errors: Message[];
+}
+
+/** Splits typed text into cells and checks it is made of Bengali aksharas. No length rule. '' is fine. */
+export function checkTyped(text: string): TypedCheck {
     const word = normalize(text);
     const cells = segment(word);
-    if (word === '') return { ok: true, cells: [] };
+    if (word === '') return { cells: [], errors: [] };
 
     const errors: Message[] = findTextIssues(word).map((i) => ({ code: i.code, en: i.en, bn: i.bn }));
 
@@ -209,6 +215,14 @@ export function checkAnswer(text: string, len: number): AnswerCheck {
             bn: 'একটি কার-চিহ্ন বা চিহ্নের আগে কোনো বর্ণ নেই।',
         });
     }
+    return { cells, errors };
+}
+
+/** Splits a typed answer into cells and checks it fits a slot of `len` cells. '' is allowed (clears). */
+export function checkAnswer(text: string, len: number): AnswerCheck {
+    if (normalize(text) === '') return { ok: true, cells: [] };
+
+    const { cells, errors } = checkTyped(text);
     if (cells.length !== len) {
         errors.push({
             code: 'length',

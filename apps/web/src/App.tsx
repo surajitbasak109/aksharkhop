@@ -39,6 +39,7 @@ import { NewPuzzleDialog } from './NewPuzzleDialog.tsx';
 import { PhoneticHelp } from './PhoneticHelp.tsx';
 import { PrintDialog } from './PrintDialog.tsx';
 import { PrintSheet, type PrintLayout } from './PrintSheet.tsx';
+import { ShareDialog } from './ShareDialog.tsx';
 import { SuggestPanel } from './SuggestPanel.tsx';
 import {
     loadDraft,
@@ -101,6 +102,7 @@ export function App() {
     const [showNew, setShowNew] = useState(false);
     const [exported, setExported] = useState<ExportResult | null>(null);
     const [showPrint, setShowPrint] = useState(false);
+    const [showShare, setShowShare] = useState(false);
     const [printLayout, setPrintLayout] = useState<PrintLayout>('puzzle');
     const boardRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -433,6 +435,9 @@ export function App() {
                     <button onClick={onExportPataparbon}>
                         <T t={ui.exportPataparbon} />
                     </button>
+                    <button onClick={() => setShowShare(true)}>
+                        <T t={ui.share} />
+                    </button>
                     <button onClick={() => setShowPrint(true)}>
                         <T t={ui.print} />
                     </button>
@@ -727,6 +732,7 @@ export function App() {
                         onClose={() => setExported(null)}
                     />
                 )}
+                {showShare && <ShareDialog puzzle={puzzle} onClose={() => setShowShare(false)} />}
                 {showPrint && (
                     <PrintDialog
                         layout={printLayout}

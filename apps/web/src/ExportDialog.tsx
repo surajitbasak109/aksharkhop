@@ -1,5 +1,6 @@
 import { type ExportResult } from '@aksharkhop/core';
 import { useEffect, useRef, useState } from 'react';
+import { copyText } from './clipboard.ts';
 import { fmt, plain, ui } from './i18n.ts';
 import { T } from './T.tsx';
 
@@ -9,23 +10,6 @@ interface Props {
     cols: number;
     fileName: string;
     onClose: () => void;
-}
-
-function copyWithSelection(text: string): boolean {
-    const box = document.createElement('textarea');
-    box.value = text;
-    box.style.position = 'fixed';
-    box.style.opacity = '0';
-    // Inside the open <dialog>: outside it, the modal makes the page inert and the copy fails.
-    (document.querySelector('dialog[open]') ?? document.body).appendChild(box);
-    box.select();
-    try {
-        return document.execCommand('copy');
-    } catch {
-        return false;
-    } finally {
-        box.remove();
-    }
 }
 
 export function ExportDialog({ result, rows, cols, fileName, onClose }: Props) {
@@ -50,13 +34,7 @@ export function ExportDialog({ result, rows, cols, fileName, onClose }: Props) {
 
     const copyJson = async () => {
         if (!result.ok) return;
-        try {
-            await navigator.clipboard.writeText(result.json);
-            setCopy('done');
-        } catch {
-            // The Clipboard API needs a secure page and focus; fall back to the old way.
-            setCopy(copyWithSelection(result.json) ? 'done' : 'failed');
-        }
+        setCopy((await copyText(result.json)) ? 'done' : 'failed');
     };
 
     return (
