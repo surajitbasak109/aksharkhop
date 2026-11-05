@@ -78,6 +78,14 @@ describe('segment', () => {
         expect(isSingleAkshara('সং')).toBe(false);
     });
 
+    it('keeps অ্যা together as one cell', () => {
+        expect(segment('অ্যাপল')).toEqual(['অ্যা', 'প', 'ল']);
+        expect(segment('অ্যান্টি')).toEqual(['অ্যা', 'ন্টি']);
+        expect(segment('ফায়ারঅ্যালার্ম')).toEqual(['ফা', 'য়া', 'র', 'অ্যা', 'লা', 'র্ম']);
+        expect(isSingleAkshara('অ্যা')).toBe(true);
+        expect(segment('অ্')).toEqual(['অ', '্']); // a bare অ্ is still not a valid cell
+    });
+
     it('treats ৎ as its own cell, as Pataparbon does', () => {
         expect(segment('উৎসব')).toEqual(['উ', 'ৎ', 'স', 'ব']);
     });

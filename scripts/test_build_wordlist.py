@@ -132,6 +132,7 @@ class RealSegmenter(unittest.TestCase):
         self.assertEqual(cells['অংশ'], ['অ', 'ং', 'শ'])
         self.assertEqual(cells['দুঃখ'], ['দু', 'ঃ', 'খ'])
         self.assertEqual(cells['চাঁদ'], ['চাঁ', 'দ'])
+        self.assertEqual(b.segment_all(['অ্যাপল'])['অ্যাপল'], ['অ্যা', 'প', 'ল'])
         self.assertEqual(cells['ক্ষমা'], ['ক্ষ', 'মা'])
         self.assertEqual(cells['উৎসব'], ['উ', 'ৎ', 'স', 'ব'])
         self.assertEqual(cells['অসদ্‌বুদ্ধি'], ['অ', 'স', 'দ্বু', 'দ্ধি'])  # ZWNJ removed from the cell
