@@ -16,7 +16,9 @@ import { SamplePage, SolvePage } from './SolvePage.tsx';
 /** Every page: the site bar, then the page. A new page starts at the top. */
 function Layout() {
     const { pathname } = useLocation();
-    useEffect(() => window.scrollTo(0, 0), [pathname]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
     return (
         <>
             <SiteNav />

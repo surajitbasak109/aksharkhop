@@ -62,7 +62,11 @@ export function FillPanel({ grid, client, status, settings, onSettings, onApply,
     }, [client, ready, settings.minFreq, settings.blocked]);
 
     // Leaving the page (or this panel) stops a fill that is still running.
-    useEffect(() => () => job.current?.cancel(), []);
+    useEffect(() => {
+        return () => {
+            job.current?.cancel();
+        };
+    }, []);
 
     const run = () => {
         const start = grid;
@@ -104,7 +108,9 @@ export function FillPanel({ grid, client, status, settings, onSettings, onApply,
     };
 
     // A word blocked from the suggestion list shows up here too.
-    useEffect(() => setBlockText(settings.blocked.join('\n')), [settings.blocked]);
+    useEffect(() => {
+        setBlockText(settings.blocked.join('\n'));
+    }, [settings.blocked]);
 
     return (
         <section className="panel fill" aria-label={plain(ui.autofill)}>

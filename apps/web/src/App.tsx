@@ -111,7 +111,9 @@ export function App() {
     const { client: fillClient, status: fillStatus } = useFillClient();
     const [fillSettings, setFillSettings] = useState(loadFillSettings);
 
-    useEffect(() => saveDraft(puzzle), [puzzle]);
+    useEffect(() => {
+        saveDraft(puzzle);
+    }, [puzzle]);
 
     // The selection always stays inside the grid (it can shrink when a smaller puzzle is opened).
     const r = Math.min(sel.r, grid.rows - 1);
