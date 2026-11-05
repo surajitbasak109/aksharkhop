@@ -5,3 +5,5 @@ dist/
 __pycache__/
 data/processed/
 .~lock.*#
+# Built by scripts/build_wordlist.py from data/raw/ (not committed; human decision 2026-11-05)
+public/words.bn.json
