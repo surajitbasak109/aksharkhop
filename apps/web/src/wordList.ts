@@ -1,6 +1,7 @@
 // Loads public/words.bn.json once, for the "in the word list" hint. The file is optional
 // (it is built locally by scripts/build_wordlist.py and not committed).
 import { useEffect, useState } from 'react';
+import { WORDS_URL } from './wordsUrl.ts';
 
 export type WordListState =
     { status: 'loading' } | { status: 'missing' } | { status: 'ready'; words: Set<string> };
@@ -8,7 +9,7 @@ export type WordListState =
 let cache: Promise<WordListState> | null = null;
 
 function load(): Promise<WordListState> {
-    cache ??= fetch(`${import.meta.env.BASE_URL}words.bn.json`)
+    cache ??= fetch(WORDS_URL)
         .then(async (res) => {
             if (!res.ok) return { status: 'missing' } as const;
             const data = (await res.json()) as { words: { w: string }[] };

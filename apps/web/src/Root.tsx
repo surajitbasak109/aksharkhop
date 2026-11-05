@@ -1,84 +1,47 @@
-// Chooses the page from the address: "#solve=<code>" opens the solver, anything else the editor.
-import { codeFromHash, decodeSolve, type Message, type SolvePuzzle } from '@aksharkhop/core';
-import { useEffect, useState } from 'react';
+// The pages of the site and their addresses:
+//   /              the landing page
+//   /editor        build a crossword
+//   /solve         open a crossword to solve (a link, a file, or the sample)
+//   /solve#solve=… a shared crossword
+//   /solve/sample  the built-in sample
+import { useEffect } from 'react';
+import { Outlet, Route, Routes, useLocation } from 'react-router';
 import { App } from './App.tsx';
-import { ui } from './i18n.ts';
-import { SolveView } from './SolveView.tsx';
-import { T } from './T.tsx';
+import { plain, site } from './i18n.ts';
+import { Landing } from './Landing.tsx';
+import { NotFound } from './NotFound.tsx';
+import { SiteNav } from './SiteNav.tsx';
+import { SamplePage, SolvePage } from './SolvePage.tsx';
 
-function useHash(): string {
-    const [hash, setHash] = useState(window.location.hash);
-    useEffect(() => {
-        const on = () => setHash(window.location.hash);
-        window.addEventListener('hashchange', on);
-        return () => window.removeEventListener('hashchange', on);
-    }, []);
-    return hash;
-}
-
-type Loaded = { code: string; result: { ok: true; solve: SolvePuzzle } | { ok: false; errors: Message[] } };
-
-function SolveRoute({ code }: { code: string }) {
-    const [loaded, setLoaded] = useState<Loaded | null>(null);
-
-    useEffect(() => {
-        let live = true;
-        setLoaded(null);
-        void decodeSolve(code).then((result) => live && setLoaded({ code, result }));
-        return () => {
-            live = false;
-        };
-    }, [code]);
-
-    if (!loaded || loaded.code !== code) {
-        return (
-            <div className="app">
-                <p className="muted" role="status">
-                    <T t={ui.solveLoading} />
-                </p>
-            </div>
-        );
-    }
-    if (!loaded.result.ok) {
-        return (
-            <div className="app">
-                <div className="notice error" role="alert">
-                    <strong>
-                        <T t={ui.solveFailed} />
-                    </strong>
-                    <p>
-                        <T t={ui.solveFailedHelp} />
-                    </p>
-                    <ul>
-                        {loaded.result.errors.map((m, i) => (
-                            <li key={i}>
-                                <T t={m} />
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                <p>
-                    <a className="button-link" href="#">
-                        <T t={ui.solveMake} />
-                    </a>
-                </p>
-            </div>
-        );
-    }
+/** Every page: the site bar, then the page. A new page starts at the top. */
+function Layout() {
+    const { pathname } = useLocation();
+    useEffect(() => window.scrollTo(0, 0), [pathname]);
     return (
-        <SolveView
-            key={code}
-            solve={loaded.result.solve}
-            code={code}
-            onOpenCode={(next) => {
-                window.location.hash = `solve=${next}`;
-            }}
-        />
+        <>
+            <SiteNav />
+            <Outlet />
+        </>
     );
 }
 
+function Editor() {
+    useEffect(() => {
+        document.title = plain(site.pageTitleEditor);
+    }, []);
+    return <App />;
+}
+
 export function Root() {
-    const hash = useHash();
-    const code = codeFromHash(hash);
-    return code === null ? <App /> : <SolveRoute code={code} />;
+    return (
+        <Routes>
+            <Route element={<Layout />}>
+                <Route index element={<Landing />} />
+                <Route path="editor" element={<Editor />} />
+                <Route path="solve" element={<SolvePage />} />
+                <Route path="solve/sample" element={<SamplePage />} />
+                <Route path="*" element={<NotFound />} />
+            </Route>
+        </Routes>
+    );
 }

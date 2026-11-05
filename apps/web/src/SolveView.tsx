@@ -22,6 +22,7 @@ import {
     type SolvePuzzle,
 } from '@aksharkhop/core';
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react';
+import { Link } from 'react-router';
 import { show } from './Board.tsx';
 import { copyText } from './clipboard.ts';
 import { fmt, plain, ui, type Text } from './i18n.ts';
@@ -298,9 +299,9 @@ export function SolveView({ solve, code, onOpenCode }: Props) {
                 <button onClick={startOver}>
                     <T t={ui.startOver} />
                 </button>
-                <a className="button-link" href="#">
+                <Link className="button-link" to="/editor">
                     <T t={ui.solveMake} />
-                </a>
+                </Link>
                 <span className="size-tag">
                     <T t={fmt.size(solve.rows, solve.cols)} /> · <T t={fmt.solveProgress(filled, total)} />
                 </span>

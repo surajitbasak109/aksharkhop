@@ -370,3 +370,298 @@ export const fmt = {
 
 /** "bn / en" for attributes (title, aria-label) where markup is not possible. */
 export const plain = (t: Text): string => `${t.bn} / ${t.en}`;
+
+// ---- Site navigation and the landing page ------------------------------------------------------
+
+export const site = {
+    navBuild: { bn: 'ছক বানান', en: 'Build' },
+    navSolve: { bn: 'সমাধান', en: 'Solve' },
+    navHome: { bn: 'হোম', en: 'Home' },
+    menu: { bn: 'মেনু', en: 'Menu' },
+    notFoundTitle: { bn: 'এই পাতাটি পাওয়া গেল না', en: 'Page not found' },
+    notFoundHelp: {
+        bn: 'ঠিকানাটি ভুল হতে পারে, বা পাতাটি সরে গেছে।',
+        en: 'The address may be wrong, or the page has moved.',
+    },
+    backHome: { bn: 'হোম পাতায় ফিরুন', en: 'Back to the home page' },
+    pageTitleHome: {
+        bn: 'অক্ষরখোপ — বাংলা শব্দছক বানান ও সমাধান',
+        en: 'Aksharkhop — build and solve Bengali crosswords',
+    },
+    pageTitleEditor: { bn: 'ছক বানান · অক্ষরখোপ', en: 'Build · Aksharkhop' },
+    pageTitleSolve: { bn: 'সমাধান · অক্ষরখোপ', en: 'Solve · Aksharkhop' },
+};
+
+export const solveHome = {
+    title: { bn: 'শব্দছক সমাধান করুন', en: 'Solve a crossword' },
+    lead: {
+        bn: 'অক্ষরখোপের লিঙ্ক খুলুন, কোনো ফাইল খুলুন, বা নমুনা দিয়ে শুরু করুন। কিছু ইনস্টল করতে হয় না।',
+        en: 'Open an Aksharkhop link, open a file, or start with the sample. Nothing to install.',
+    },
+    pasteLabel: { bn: 'লিঙ্ক বা কোড পেস্ট করুন', en: 'Paste a link or code' },
+    pastePlaceholder: { bn: 'https://…/solve#solve=…', en: 'https://…/solve#solve=…' },
+    pasteGo: { bn: 'খুলুন', en: 'Open' },
+    pasteBad: {
+        bn: 'এটি অক্ষরখোপের সঠিক লিঙ্ক বা কোড নয়।',
+        en: 'That is not a valid Aksharkhop link or code.',
+    },
+    fileHelp: {
+        bn: 'অক্ষরখোপের সংরক্ষণ-ফাইল বা Pataparbon-এর JSON ফাইল খোলা যায়।',
+        en: 'An Aksharkhop save file or a Pataparbon JSON file can be opened.',
+    },
+    sample: { bn: 'নমুনা শব্দছক সমাধান করুন', en: 'Solve the sample' },
+    or: { bn: 'অথবা', en: 'or' },
+};
+
+export const landing = {
+    eyebrow: { bn: 'বাংলা শব্দছক · এক ঘরে এক অক্ষর', en: 'Bengali crosswords · one akshara per cell' },
+    heroTitle: {
+        bn: 'বাংলা শব্দছক বানান, ছাপুন আর সমাধান করুন',
+        en: 'Build, print and solve Bengali crosswords',
+    },
+    heroLead: {
+        bn: 'অক্ষরখোপে ক্ষমা-র মতো যুক্তাক্ষর ভাঙে না: যেমন পড়েন, তেমনই এক ঘরে বসে। ছক আঁকুন, শব্দ বসান বা নিজে-থেকে ভরান, সূত্র লিখুন, তারপর ছাপুন বা একটি লিঙ্কে সবার সঙ্গে ভাগ করুন।',
+        en: 'In Aksharkhop a conjunct like ক্ষমা is never broken up: each akshara sits in one cell, the way you read it. Draw the grid, place words or auto-fill, write clues, then print it or share it as one link.',
+    },
+    ctaBuild: { bn: 'ছক বানানো শুরু করুন', en: 'Start building' },
+    ctaSample: { bn: 'নমুনা শব্দছক সমাধান করুন', en: 'Solve a sample' },
+    heroNote: {
+        bn: 'বিনামূল্যে · সাইন-আপ লাগে না · আপনার ছক আপনার ব্রাউজারেই থাকে',
+        en: 'Free · no sign-up · your puzzle stays in your browser',
+    },
+    sampleCaption: { bn: 'একটি নমুনা ছক: ১২টি শব্দ, ৫×৫', en: 'A sample grid: 12 words, 5×5' },
+
+    whatTitle: { bn: 'অক্ষরখোপ কী?', en: 'What is Aksharkhop?' },
+    whatText: {
+        bn: 'অক্ষরখোপ (অক্ষর + খোপ) বাংলা শব্দছক তৈরির একটি ওয়েব অ্যাপ। এতে আছে ছক-সম্পাদক, সূত্র লেখার জায়গা, প্রায় ৭৭ হাজার শব্দের তালিকা থেকে পরামর্শ ও নিজে-থেকে-ভরা, A4 কাগজে ছাপার ব্যবস্থা, আর একটি সমাধান-পাতা, যেখানে যে-কেউ লিঙ্ক খুলে ছকটি সমাধান করতে পারেন।',
+        en: 'Aksharkhop (অক্ষর, letter + খোপ, box) is a web app for making Bengali crosswords. It has a grid editor, a place to write clues, suggestions and auto-fill from a list of about 77,000 words, A4 printing, and a solver page where anyone can open a link and solve the puzzle.',
+    },
+
+    whyTitle: { bn: 'এক ঘরে এক অক্ষর', en: 'One akshara per cell' },
+    whyText: {
+        bn: 'বাংলা লেখায় একটি অক্ষর একাধিক বর্ণচিহ্ন দিয়ে তৈরি হতে পারে: ক্ষ, স্ত্র, কি, চাঁ। ছাপা শব্দছকে ঠিক এমনই একটি অক্ষর একটি ঘরে বসে। অক্ষরখোপ প্রতিটি শব্দকে নিজে থেকে এভাবে ভাগ করে, তাই আপনাকে হিসেব করতে হয় না। দুটি ঘর মিলবে তখনই, যখন দুটি অক্ষর হুবহু এক।',
+        en: 'In Bengali writing one akshara can be made of several characters: ক্ষ, স্ত্র, কি, চাঁ. In a printed শব্দছক such an akshara fills exactly one cell. Aksharkhop splits every word this way for you, so you never count by hand. Two crossing cells match only when the two aksharas are exactly the same.',
+    },
+    whyCaption: { bn: 'শব্দ যেভাবে ঘরে ভাগ হয়', en: 'How words split into cells' },
+    whyNote: {
+        bn: 'ং, ঃ আর ৎ আলাদা ঘর পায়; চন্দ্রবিন্দু (ঁ) নিজের অক্ষরের সঙ্গে থাকে।',
+        en: 'ং, ঃ and ৎ get a cell of their own; the chandrabindu (ঁ) stays with its letter.',
+    },
+
+    featuresTitle: { bn: 'কী কী করা যায়', en: 'What you can do' },
+    features: [
+        {
+            title: { bn: 'ছক-সম্পাদক', en: 'Grid editor' },
+            text: {
+                bn: '৫×৫ থেকে ১৫×১৫ পর্যন্ত যেকোনো মাপ। কালো ঘর বসান, চাইলে ১৮০° প্রতিসাম্য রাখুন। নম্বর নিজে থেকে বসে। পূর্বাবস্থা, কিবোর্ডে চলাচল সবই আছে।',
+                en: 'Any size from 5×5 to 15×15. Place blocks, keep 180° symmetry if you like. Numbers appear on their own. Undo and keyboard movement included.',
+            },
+        },
+        {
+            title: { bn: 'ইংরেজি কিবোর্ডেই বাংলা', en: 'Bengali from any keyboard' },
+            text: {
+                bn: 'বাংলা কিবোর্ড না থাকলেও চলবে: ফোনেটিক টাইপিংয়ে kShoma লিখলে ক্ষমা হয়। উত্তর আর সূত্র দুটোতেই কাজ করে।',
+                en: 'No Bengali keyboard needed: with phonetic typing, kShoma becomes ক্ষমা. It works for answers and for clues.',
+            },
+        },
+        {
+            title: { bn: 'শব্দের পরামর্শ', en: 'Word suggestions' },
+            text: {
+                bn: 'কোনো শব্দের ঘর বাছলে সেখানে যা বসতে পারে সেই শব্দগুলো দেখায়, যেগুলো আড়াআড়ি শব্দকেও আটকায় না। বেশি চেনা শব্দ আগে।',
+                en: 'Pick a slot and see the words that fit, leaving each crossing word at least one option. Commonest words first.',
+            },
+        },
+        {
+            title: { bn: 'নিজে-থেকে ভরা', en: 'Auto-fill' },
+            text: {
+                bn: 'ছকে যা লিখেছেন তা রেখে বাকিটা সাধারণত কয়েক সেকেন্ডে ভরে দেয়। একই শব্দ দুবার নয়। না মিললে বলে কোন ঘরটা আটকাচ্ছে। এক ধাপে পূর্বাবস্থায় ফেরানো যায়।',
+                en: 'Keeps what you typed and usually fills the rest in seconds, never repeating a word. If it cannot, it tells you which slot is in the way. One undo takes it back.',
+            },
+        },
+        {
+            title: { bn: 'সূত্র লেখা', en: 'Clue writing' },
+            text: {
+                bn: 'পাশাপাশি ও উপর-নিচের সূত্র ছকের সঙ্গে মিলিয়ে দেখায়। কোন শব্দের উত্তর বা সূত্র বাকি, আর কোন সূত্রে উত্তরটিই লেখা আছে, সব ধরা পড়ে।',
+                en: 'Across and down clues sit beside the grid. You see which words still lack an answer or a clue, and which clue gives its answer away.',
+            },
+        },
+        {
+            title: { bn: 'A4 কাগজে ছাপা', en: 'Print on A4' },
+            text: {
+                bn: 'ফাঁকা ছক ও সূত্র, উত্তরমালা, বা দুটিই। যুক্তাক্ষর ও কার-চিহ্ন ঘরের মধ্যেই থাকে, কাটা পড়ে না।',
+                en: 'Blank grid with clues, answer key, or both. Conjuncts and vowel signs stay inside their cells.',
+            },
+        },
+        {
+            title: { bn: 'Pataparbon-এর জন্য এক্সপোর্ট', en: 'Export for Pataparbon' },
+            text: {
+                bn: 'এক্সপোর্টের আগে ছকটি Pataparbon-এর নিজস্ব নিয়মে যাচাই হয়: অক্ষর-ভাগ, নম্বর, সূত্র। ভুল থাকলে বাংলা-ইংরেজিতে জানায়।',
+                en: "Before exporting, the puzzle is checked against Pataparbon's own rules: akshara split, numbering, clues. Problems are explained in Bengali and English.",
+            },
+        },
+        {
+            title: { bn: 'লিঙ্কে শেয়ার, আলাদা সমাধান-পাতা', en: 'Share by link, a solver page' },
+            text: {
+                bn: 'একটি লিঙ্কেই পুরো শব্দছক। যিনি খুলবেন তিনি ঘরে বা পুরো শব্দ লিখে সমাধান করতে পারবেন, ঘর বা শব্দ পরীক্ষা করতে পারবেন, উত্তর দেখে নিতে পারবেন। সময় গোনা হয়, আর অগ্রগতি ব্রাউজারে জমা থাকে।',
+                en: 'The whole crossword in one link. The solver types a cell at a time or a whole word, checks a cell or word, or reveals an answer. A timer runs and progress is kept in the browser.',
+            },
+        },
+        {
+            title: { bn: 'আপনার ছক আপনার কাছে', en: 'Your puzzle stays with you' },
+            text: {
+                bn: 'সাইন-আপ বা অ্যাকাউন্ট নেই। কাজ নিজে থেকে এই ব্রাউজারে সংরক্ষিত হয়, আর ফাইল হিসেবেও নামিয়ে রাখা যায়। লিঙ্কে শেয়ার না করলে কিছুই বাইরে যায় না।',
+                en: 'No sign-up or account. Work is autosaved in this browser and can be saved as a file. Nothing leaves your device unless you share a link.',
+            },
+        },
+    ],
+
+    stepsTitle: { bn: 'কীভাবে ব্যবহার করবেন', en: 'How to use it' },
+    steps: [
+        {
+            title: { bn: 'ছক আঁকুন', en: 'Draw the grid' },
+            text: {
+                bn: 'মাপ বেছে নিন (৯×৯ দিয়ে শুরু করা যায়), তারপর ক্লিক করে কালো ঘর বসান।',
+                en: 'Pick a size (9×9 is a good start), then click to place the black blocks.',
+            },
+        },
+        {
+            title: { bn: 'শব্দ বসান', en: 'Add the words' },
+            text: {
+                bn: 'শব্দের ঘরে গিয়ে পুরো শব্দ লিখুন, বা পরামর্শ থেকে বেছে নিন, বা “বাকিটা ভরুন” চাপুন।',
+                en: 'Select a slot and type the whole word, pick from the suggestions, or press “Fill the rest”.',
+            },
+        },
+        {
+            title: { bn: 'সূত্র লিখুন', en: 'Write the clues' },
+            text: {
+                bn: 'ছকের নিচের সূত্র-তালিকায় প্রতিটি শব্দের সূত্র লিখুন। সব ঘর ও সূত্র ঠিক হলে ছক তৈরি।',
+                en: 'In the clue list under the grid, write a clue for every word. When every slot has an answer and a clue, the puzzle is done.',
+            },
+        },
+        {
+            title: { bn: 'ছাপুন, এক্সপোর্ট করুন বা শেয়ার করুন', en: 'Print, export or share' },
+            text: {
+                bn: 'A4 কাগজে ছাপুন, Pataparbon-এর জন্য JSON নামান, বা একটি লিঙ্ক বানিয়ে পাঠিয়ে দিন।',
+                en: 'Print on A4, download the JSON for Pataparbon, or make a link and send it.',
+            },
+        },
+        {
+            title: { bn: 'সমাধান করুন', en: 'Solve it' },
+            text: {
+                bn: 'লিঙ্ক খুললেই সমাধান-পাতা। আলাদা কিছু ইনস্টল করতে হয় না।',
+                en: 'Opening the link shows the solver page. Nothing to install.',
+            },
+        },
+    ],
+
+    audienceTitle: { bn: 'কাদের কাজে লাগবে', en: 'Who it is for' },
+    audience: [
+        {
+            title: { bn: 'শব্দছক-নির্মাতা ও সম্পাদক', en: 'Puzzle makers and editors' },
+            text: {
+                bn: 'পত্রিকা, ম্যাগাজিন বা লিটল ম্যাগাজিনের জন্য নিয়মিত শব্দছক বানান: ছক, শব্দ, সূত্র আর ছাপা এক জায়গায়।',
+                en: 'For anyone making a regular শব্দছক for a newspaper, magazine or little magazine: grid, words, clues and print in one place.',
+            },
+        },
+        {
+            title: { bn: 'শিক্ষক ও শিক্ষার্থী', en: 'Teachers and students' },
+            text: {
+                bn: 'ক্লাসের পাঠ থেকে শব্দ নিয়ে বানান-চর্চা বা শব্দভান্ডারের খেলা। শিক্ষার্থীরা নিজেরাও শব্দছক বানাতে পারে।',
+                en: 'Spelling practice or vocabulary games from the words of a lesson. Students can build puzzles themselves.',
+            },
+        },
+        {
+            title: { bn: 'পরিবার, ক্লাব ও কুইজের আয়োজক', en: 'Families, clubs and quiz hosts' },
+            text: {
+                bn: 'জন্মদিন, পুজোসংখ্যা বা আড্ডার জন্য নিজেদের শব্দছক বানিয়ে একটি লিঙ্কে সবাইকে পাঠান।',
+                en: 'Make your own puzzle for a birthday, a festival issue or a get-together, and send everyone one link.',
+            },
+        },
+        {
+            title: { bn: 'যাঁরা বাংলা শিখছেন', en: 'People learning Bengali' },
+            text: {
+                bn: 'ফোনেটিক টাইপিংয়ে ইংরেজি কিবোর্ডেই বাংলা লেখা যায়, আর শব্দছক অক্ষর চেনার ভালো অনুশীলন।',
+                en: 'Phonetic typing lets you write Bengali on an English keyboard, and a crossword is good practice for knowing aksharas.',
+            },
+        },
+        {
+            title: { bn: 'Pataparbon-এ প্রকাশকারী', en: 'Pataparbon publishers' },
+            text: {
+                bn: 'Pataparbon-এ শব্দছক প্রকাশ করেন? ছক যাচাই করে সরাসরি তার JSON ফাইল পাবেন।',
+                en: 'Publishing a crossword on Pataparbon? Get its JSON file straight from a checked puzzle.',
+            },
+        },
+    ],
+
+    sampleTitle: { bn: 'এখনই চেষ্টা করুন', en: 'Try it now' },
+    sampleText: {
+        bn: 'নমুনা শব্দছকটি সমাধান করে দেখুন: ঘরে বসান, পরীক্ষা করুন, আটকে গেলে উত্তর দেখুন।',
+        en: 'Solve the sample crossword: type in the cells, check your answers, and reveal one if you are stuck.',
+    },
+
+    faqTitle: { bn: 'সচরাচর প্রশ্ন', en: 'Questions' },
+    faq: [
+        {
+            q: { bn: 'বাংলা কিবোর্ড না থাকলে কী করব?', en: 'What if I have no Bengali keyboard?' },
+            a: {
+                bn: 'ফোনেটিক টাইপিং চালু থাকলে ইংরেজি হরফে লিখলেই বাংলা হয়। যেমন amora = আমরা, kShoma = ক্ষমা। নিয়মের তালিকা উত্তরের বাক্সের নিচেই আছে।',
+                en: 'With phonetic typing on, type in Latin letters and get Bengali: amora = আমরা, kShoma = ক্ষমা. The list of keys is right under the answer box.',
+            },
+        },
+        {
+            q: { bn: 'এটা কি বিনামূল্যে?', en: 'Is it free?' },
+            a: {
+                bn: 'হ্যাঁ। এটি একটি অবাণিজ্যিক প্রকল্প, সাইন-আপ বা অ্যাকাউন্ট লাগে না।',
+                en: 'Yes. It is a non-commercial project and needs no sign-up or account.',
+            },
+        },
+        {
+            q: { bn: 'আমার ছক কোথায় জমা থাকে?', en: 'Where is my puzzle stored?' },
+            a: {
+                bn: 'আপনার ব্রাউজারে, নিজে থেকে। আলাদা করে ফাইল হিসেবে সংরক্ষণও করতে পারেন। অন্য ব্রাউজার বা কম্পিউটারে নিতে ফাইলটি খুলুন। লিঙ্কে শেয়ার না করলে কিছুই বাইরে যায় না।',
+                en: 'In your browser, automatically. You can also save it as a file and open it on another browser or computer. Nothing leaves your device unless you share a link.',
+            },
+        },
+        {
+            q: {
+                bn: 'অন্যরা কি কিছু ইনস্টল না করেই সমাধান করতে পারবেন?',
+                en: 'Can others solve it without installing anything?',
+            },
+            a: {
+                bn: 'পারবেন। “শেয়ার” থেকে লিঙ্ক নিয়ে পাঠান; যিনি খুলবেন তিনি ব্রাউজারেই সমাধান করবেন। মনে রাখবেন, লিঙ্কের ভেতরে উত্তরও থাকে, তাই লিঙ্ক ডিকোড করলে উত্তর দেখা সম্ভব।',
+                en: 'Yes. Take the link from “Share” and send it; whoever opens it solves in the browser. Note that the answers are inside the link, so someone who decodes the link can read them.',
+            },
+        },
+        {
+            q: { bn: 'শব্দতালিকার বানান কোন রীতির?', en: 'Which spelling does the word list follow?' },
+            a: {
+                bn: 'লক্ষ্য পশ্চিমবঙ্গের বানান। তালিকাটি একটি উন্মুক্ত শব্দভান্ডার থেকে নেওয়া, তাই কিছু শব্দের দুই রকম বানানই থাকতে পারে। তালিকা শুধু পরামর্শ আর নিজে-থেকে-ভরার জন্য: নিজের পছন্দের যেকোনো শব্দ লিখতে বাধা নেই।',
+                en: 'The aim is West Bengal spelling. The list comes from an open word list, so a few words may appear in both spellings. It is only used for suggestions and auto-fill: you can always type any word you like.',
+            },
+        },
+        {
+            q: { bn: 'আমার নিজের শব্দ বসাতে পারব?', en: 'Can I use my own words?' },
+            a: {
+                bn: 'অবশ্যই। শব্দের ঘরে যেকোনো শব্দ লিখুন; তালিকায় না থাকলে শুধু জানিয়ে দেয়। কিছু শব্দ কখনও চান না? “যে শব্দ কখনও বসবে না” তালিকায় রাখুন।',
+                en: 'Of course. Type any word into a slot; if it is not in the list, you are only told so. Never want a word? Put it in the “Words never to use” list.',
+            },
+        },
+        {
+            q: { bn: 'বড় ছক ভরা যায় না কেন?', en: 'Why can a big grid fail to fill?' },
+            a: {
+                bn: 'তালিকায় লম্বা শব্দ কম: সাত অক্ষরের শব্দ প্রায় ১,৯০০টি, নয় অক্ষরের ৬৮টি। তাই লম্বা ঘর কম রেখে মাঝে কালো ঘর দিলে ভরা অনেক সহজ হয়। ভরতে না পারলে অক্ষরখোপ বলে দেয় কোন ঘরটি আটকাচ্ছে।',
+                en: 'The list has few long words: about 1,900 words of 7 cells and 68 of 9. Breaking long rows with blocks makes filling much easier. When it cannot fill, Aksharkhop tells you which slot is in the way.',
+            },
+        },
+    ],
+
+    finalTitle: { bn: 'আপনার প্রথম শব্দছক বানিয়ে ফেলুন', en: 'Make your first crossword' },
+    finalText: {
+        bn: 'নতুন ছক খুলুন, বা আগের সংরক্ষিত কাজ ফাইল থেকে খুলুন।',
+        en: 'Open a new grid, or open earlier work from a file.',
+    },
+    footerCredit: {
+        bn: 'শব্দতালিকা: kawshikbuet17/bengali-words (MIT লাইসেন্স)। অক্ষরখোপ একটি অবাণিজ্যিক প্রকল্প।',
+        en: 'Word list: kawshikbuet17/bengali-words (MIT licence). Aksharkhop is a non-commercial project.',
+    },
+};

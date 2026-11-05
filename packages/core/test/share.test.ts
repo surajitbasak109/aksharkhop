@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { importPataparbon } from '../src/exportPataparbon.ts';
 import { createPuzzle, serializePuzzle, type Puzzle } from '../src/puzzle.ts';
+import { SAMPLE_PUZZLE } from '../src/samplePuzzle.ts';
 import {
     codeFromHash,
     decodeSolve,
@@ -230,5 +231,31 @@ describe('links', () => {
         expect(codeFromHash('')).toBeNull();
         expect(codeFromHash('#other=1')).toBeNull();
         expect(codeFromHash('#solve=')).toBe('');
+    });
+});
+
+describe('SAMPLE_PUZZLE', () => {
+    it('is a valid puzzle that can be shared and opened', async () => {
+        const back = await decodeSolve(await encodeSolve(SAMPLE_PUZZLE));
+        expect(back).toEqual({ ok: true, solve: SAMPLE_PUZZLE });
+    });
+
+    it('has a clue for every word, and no clue contains its answer', () => {
+        const { across, down } = solveEntries(SAMPLE_PUZZLE);
+        expect(SAMPLE_PUZZLE.clues.across).toHaveLength(across.length);
+        expect(SAMPLE_PUZZLE.clues.down).toHaveLength(down.length);
+        for (const [entries, clues, dr, dc] of [
+            [across, SAMPLE_PUZZLE.clues.across, 0, 1],
+            [down, SAMPLE_PUZZLE.clues.down, 1, 0],
+        ] as const) {
+            entries.forEach((e, i) => {
+                const word = Array.from(
+                    { length: e.len },
+                    (_, k) => SAMPLE_PUZZLE.solution[e.r + k * dr]![e.c + k * dc],
+                ).join('');
+                expect(clues[i]!.trim()).not.toBe('');
+                expect(clues[i]!.includes(word), `clue for ${word} contains the answer`).toBe(false);
+            });
+        }
     });
 });

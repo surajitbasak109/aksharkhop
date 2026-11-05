@@ -25,7 +25,7 @@ export function ShareDialog({ puzzle, onClose }: { puzzle: Puzzle; onClose: () =
             return;
         }
         void encodeSolve(result.solve).then((code) => {
-            if (live) setMade({ kind: 'ok', link: solveLink(window.location.href, code) });
+            if (live) setMade({ kind: 'ok', link: solveLink(`${window.location.origin}/solve`, code) });
         });
         return () => {
             live = false;

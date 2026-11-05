@@ -2,6 +2,7 @@
 // A fill runs in slices of 50 ms with a pause between, so a "cancel" message can get through.
 import { FillSearch, suggestWords, WordIndex, type WordEntry } from '@aksharkhop/core';
 import type { FromWorker, ToWorker } from './fillProtocol.ts';
+import { WORDS_URL } from './wordsUrl.ts';
 
 const ctx = self as unknown as {
     postMessage(message: FromWorker): void;
@@ -11,7 +12,7 @@ const ctx = self as unknown as {
 let index: WordIndex | null = null;
 const cancelled = new Set<number>();
 
-const ready: Promise<WordIndex | null> = fetch(`${import.meta.env.BASE_URL}words.bn.json`)
+const ready: Promise<WordIndex | null> = fetch(WORDS_URL)
     .then(async (res) => {
         if (!res.ok) return null;
         const data = (await res.json()) as { words: WordEntry[] };
