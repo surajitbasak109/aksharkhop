@@ -391,3 +391,51 @@ button.link {
     gap: 8px;
     margin-top: 14px;
 }
+
+.phonetic-toggle {
+    margin-top: 8px;
+    font-size: 14px;
+}
+.converted {
+    font-size: 20px;
+    margin: 6px 0 0;
+}
+.phonetic-help {
+    margin-top: 10px;
+    border-top: 1px solid var(--line);
+    padding-top: 6px;
+}
+.phonetic-help summary {
+    cursor: pointer;
+}
+.phonetic-help h3 {
+    font-size: 13px;
+    margin: 10px 0 4px;
+}
+.phonetic-help .rules {
+    padding-left: 18px;
+    margin: 6px 0;
+    font-size: 13px;
+}
+.keymap {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr));
+    gap: 4px;
+    margin: 0;
+}
+.keymap > div {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0 6px;
+}
+.keymap dt code {
+    font-size: 13px;
+    color: var(--accent);
+}
+.keymap dd {
+    margin: 0;
+    font-size: 16px;
+}

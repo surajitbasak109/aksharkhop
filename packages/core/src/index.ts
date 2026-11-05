@@ -6,3 +6,4 @@ export type { Entry, Numbering } from './numbering.ts';
 export * from './grid.ts';
 export * from './puzzle.ts';
 export { formatJson } from './json.ts';
+export { phoneticToBengali, PHONETIC_TABLE } from './phonetic.ts';

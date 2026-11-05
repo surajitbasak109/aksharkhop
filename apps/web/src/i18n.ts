@@ -54,6 +54,34 @@ export const ui = {
     listMissing: { bn: 'শব্দতালিকা পাওয়া যায়নি', en: 'Word list not found' },
     willConflict: { bn: 'আড়াআড়ি শব্দের সঙ্গে মিলবে না', en: 'Clashes with a crossing word' },
 
+    phonetic: { bn: 'ইংরেজি হরফে বাংলা লেখা (ফোনেটিক)', en: 'Phonetic typing (Latin → Bengali)' },
+    phoneticHelp: { bn: 'ফোনেটিক নিয়ম', en: 'Phonetic keys' },
+    phoneticRules: [
+        {
+            bn: 'ব্যঞ্জনের পরে স্বর লিখলে কার-চিহ্ন হয়: ka = কা। শুরুতে বা স্বরের পরে পুরো স্বর: a = আ।',
+            en: 'A vowel after a consonant becomes its sign: ka = কা. At the start or after a vowel: a = আ.',
+        },
+        {
+            bn: 'পাশাপাশি দুটি ব্যঞ্জন যুক্তাক্ষর হয়: kSh = ক্ষ, kormo = কর্ম। আলাদা রাখতে মাঝে o লিখুন: amora = আমরা।',
+            en: 'Two consonants in a row join: kSh = ক্ষ, kormo = কর্ম. Put o between them to keep them apart: amora = আমরা.',
+        },
+        {
+            bn: 'বড় ও ছোট হাতের অক্ষর আলাদা: t = ত, T = ট। ,, = হসন্ত (্), ` = শুধু বিভাজন।',
+            en: 'Case matters: t = ত, T = ট. ,, = hasanta (্), ` = separator only.',
+        },
+        {
+            bn: 'বাংলা কিবোর্ডে বা পেস্ট করে লেখা বাংলা যেমন আছে তেমনই থাকে।',
+            en: 'Bengali typed with a Bengali keyboard, or pasted, is kept as it is.',
+        },
+    ],
+    phoneticVowels: { bn: 'স্বর', en: 'Vowels' },
+    phoneticConsonants: { bn: 'ব্যঞ্জন', en: 'Consonants' },
+    phoneticMarks: { bn: 'চিহ্ন', en: 'Marks' },
+    tryPhonetic: {
+        bn: 'বাংলা কিবোর্ড নেই? "ইংরেজি হরফে বাংলা লেখা" চালু করুন।',
+        en: 'No Bengali keyboard? Turn on "Phonetic typing".',
+    },
+
     conflicts: { bn: 'অমিল', en: 'Conflicts' },
     noConflicts: { bn: 'কোনো অমিল নেই', en: 'No conflicts' },
     stats: { bn: 'হিসাব', en: 'Stats' },
@@ -67,7 +95,7 @@ export const ui = {
     keyEsc: { bn: 'Esc: ছক-এ ফেরা', en: 'Esc: back to the grid' },
     board: { bn: 'শব্দছকের ঘর', en: 'Crossword grid' },
     savedLocally: { bn: 'এই ব্রাউজারে নিজে থেকেই সংরক্ষিত হয়', en: 'Autosaved in this browser' },
-} satisfies Record<string, Text>;
+} satisfies Record<string, Text | Text[]>;
 
 export const fmt = {
     slotLabel: (dir: 'across' | 'down', n: number, len: number): Text => ({

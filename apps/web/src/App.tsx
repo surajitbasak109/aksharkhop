@@ -10,6 +10,7 @@ import {
     normalize,
     numbering,
     parsePuzzle,
+    phoneticToBengali,
     placeAnswer,
     previewAnswer,
     serializePuzzle,
@@ -29,7 +30,8 @@ import { Board, show } from './Board.tsx';
 import { historyReducer } from './history.ts';
 import { fmt, plain, ui, type Text } from './i18n.ts';
 import { NewPuzzleDialog } from './NewPuzzleDialog.tsx';
-import { loadDraft, saveDraft } from './storage.ts';
+import { PhoneticHelp } from './PhoneticHelp.tsx';
+import { loadDraft, loadPhonetic, saveDraft, savePhonetic } from './storage.ts';
 import { T } from './T.tsx';
 import { useWordList } from './wordList.ts';
 
@@ -77,6 +79,7 @@ export function App() {
     const [sel, setSel] = useState<Selection>({ r: 0, c: 0, dir: 'across' });
     const [blockMode, setBlockMode] = useState(false);
     const [draft, setDraft] = useState('');
+    const [phonetic, setPhonetic] = useState(loadPhonetic);
     const [notice, setNotice] = useState<Notice | null>(null);
     const [showNew, setShowNew] = useState(false);
     const boardRef = useRef<HTMLDivElement>(null);
@@ -112,8 +115,10 @@ export function App() {
         // Only when the slot changes, not on every edit of its letters.
     }, [slotKey]);
 
-    const check = slot ? checkAnswer(draft, slot.len) : null;
-    const typed = normalize(draft);
+    // What the answer box means in Bengali: the phonetic conversion, or the text as typed.
+    const word = phonetic ? phoneticToBengali(draft) : draft;
+    const check = slot ? checkAnswer(word, slot.len) : null;
+    const typed = normalize(word);
     const typing = slot !== null && typed !== '' && typed !== ownWord && typed !== currentWord;
     const states: PreviewState[] = typing && check ? previewAnswer(grid, slot, check.cells) : [];
     const preview = useMemo(() => {
@@ -166,6 +171,7 @@ export function App() {
     const commit = () => {
         if (!slot || !check || !check.ok) return;
         apply(placeAnswer(grid, slot, check.cells));
+        setDraft(check.cells.join(''));
         focusBoard();
     };
 
@@ -316,7 +322,7 @@ export function App() {
     const meta = (change: Partial<Puzzle>) => dispatch({ type: 'meta', puzzle: { ...puzzle, ...change } });
 
     const listHint =
-        !slot || draft.trim() === '' || !check?.ok
+        !slot || typed === '' || !check?.ok
             ? null
             : words.status === 'loading'
               ? ui.listLoading
@@ -457,7 +463,7 @@ export function App() {
                                 onChange={(e) => setDraft(e.target.value)}
                                 onKeyDown={onAnswerKey}
                             />
-                            <button onClick={commit} disabled={!slot || !check?.ok || draft.trim() === ''}>
+                            <button onClick={commit} disabled={!slot || !check?.ok || typed === ''}>
                                 <T t={ui.place} />
                             </button>
                             <button
@@ -467,7 +473,24 @@ export function App() {
                                 <T t={ui.clearSlot} />
                             </button>
                         </div>
-                        {slot && check && draft.trim() !== '' && (
+                        <label className="check phonetic-toggle">
+                            <input
+                                type="checkbox"
+                                checked={phonetic}
+                                onChange={(e) => {
+                                    setPhonetic(e.target.checked);
+                                    savePhonetic(e.target.checked);
+                                    inputRef.current?.focus();
+                                }}
+                            />
+                            <T t={ui.phonetic} />
+                        </label>
+                        {phonetic && typed !== '' && typed !== normalize(draft) && (
+                            <p className="converted" lang="bn" aria-live="polite">
+                                {typed}
+                            </p>
+                        )}
+                        {slot && check && typed !== '' && (
                             <div className="cells-preview" aria-live="polite">
                                 {check.cells.map((cell, i) => (
                                     <span key={i} className={i >= slot.len ? 'chip over' : 'chip'}>
@@ -485,6 +508,11 @@ export function App() {
                                 ))}
                             </ul>
                         )}
+                        {!phonetic && typing && check && !check.ok && check.errors.some((m) => m.code === 'latin') && (
+                            <p className="hint">
+                                <T t={ui.tryPhonetic} />
+                            </p>
+                        )}
                         {typing && check?.ok && willConflict && (
                             <p className="warn">
                                 <T t={ui.willConflict} />
@@ -495,6 +523,7 @@ export function App() {
                                 <T t={listHint} />
                             </p>
                         )}
+                        {phonetic && <PhoneticHelp />}
                     </section>
 
                     <section className="panel">

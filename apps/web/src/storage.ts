@@ -21,3 +21,22 @@ export function saveDraft(p: Puzzle): void {
         // Not fatal: the user can still save to a file.
     }
 }
+
+const PHONETIC_KEY = 'aksharkhop.phonetic';
+
+/** Phonetic typing is on unless this viewer turned it off. */
+export function loadPhonetic(): boolean {
+    try {
+        return window.localStorage.getItem(PHONETIC_KEY) !== 'off';
+    } catch {
+        return true;
+    }
+}
+
+export function savePhonetic(on: boolean): void {
+    try {
+        window.localStorage.setItem(PHONETIC_KEY, on ? 'on' : 'off');
+    } catch {
+        // Not fatal.
+    }
+}
