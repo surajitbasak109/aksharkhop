@@ -63,9 +63,19 @@ describe('segment', () => {
         expect(isSingleAkshara('ক্ষ')).toBe(true);
         expect(isSingleAkshara('শ্রী')).toBe(true);
         expect(isSingleAkshara('চাঁ')).toBe(true);
-        expect(isSingleAkshara('সং')).toBe(true);
+        expect(isSingleAkshara('সং')).toBe(false); // স + ং are two cells now
         expect(isSingleAkshara('ক্ষমা')).toBe(false);
         expect(isSingleAkshara('')).toBe(false);
+    });
+
+    it('puts ং and ঃ in cells of their own, but keeps ঁ with its letter', () => {
+        expect(segment('অংশ')).toEqual(['অ', 'ং', 'শ']);
+        expect(segment('দুঃখ')).toEqual(['দু', 'ঃ', 'খ']);
+        expect(segment('চাঁদ')).toEqual(['চাঁ', 'দ']);
+        expect(segment('ইঁদুর')).toEqual(['ইঁ', 'দু', 'র']);
+        expect(segment('ং')).toEqual(['ং']);
+        expect(isSingleAkshara('ং')).toBe(true);
+        expect(isSingleAkshara('সং')).toBe(false);
     });
 
     it('treats ৎ as its own cell, as Pataparbon does', () => {
