@@ -1,3 +1,4 @@
 data/
 .claude/
 pnpm-lock.yaml
+public/words.bn.json

@@ -1,0 +1,2 @@
+# Words that must never appear in the shipped list (offensive, unwanted). One per line.
+# Maintained by the human. Lines starting with # are ignored.
