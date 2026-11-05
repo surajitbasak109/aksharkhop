@@ -1,6 +1,7 @@
 {
     "name": "aksharkhop",
     "private": true,
+    "license": "MIT",
     "version": "0.0.0",
     "description": "Aksharkhop (অক্ষরখোপ): a Bengali crossword builder",
     "type": "module",

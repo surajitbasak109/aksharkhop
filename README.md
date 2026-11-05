@@ -40,6 +40,11 @@ loads. `python3 scripts/build_wordlist.py` (needs `data/raw/`) rebuilds it, and 
 else, host it (the server must allow cross-origin requests) and set `VITE_WORDS_URL` in the Vercel project
 settings, then redeploy.
 
+## Licence
+
+The code is released under the [MIT licence](LICENSE). The word list in `public/words.txt` comes from an
+MIT-licensed dataset: see [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
 ## Credits
 
 **Word list.** The words in `public/words.txt` come from
