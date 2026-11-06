@@ -1,4 +1,4 @@
-import { DEFAULT_SIZE, MAX_SIZE, MIN_SIZE, SIZE_PRESETS, isValidSize } from '@aksharkhop/core';
+import { DEFAULT_SIZE, MAX_NEW_SIZE, MIN_SIZE, SIZE_PRESETS, isValidNewSize } from '@aksharkhop/core';
 import { useEffect, useRef, useState } from 'react';
 import { fmt, plain, ui } from './i18n.ts';
 import { T } from './T.tsx';
@@ -27,7 +27,7 @@ export function NewPuzzleDialog({
 
     const nr = Number(rows);
     const nc = Number(cols);
-    const ok = isValidSize(nr) && isValidSize(nc);
+    const ok = isValidNewSize(nr) && isValidNewSize(nc);
 
     return (
         <dialog
@@ -65,7 +65,7 @@ export function NewPuzzleDialog({
                         <input
                             type="number"
                             min={MIN_SIZE}
-                            max={MAX_SIZE}
+                            max={MAX_NEW_SIZE}
                             value={rows}
                             onChange={(e) => setRows(e.target.value)}
                         />
@@ -75,7 +75,7 @@ export function NewPuzzleDialog({
                         <input
                             type="number"
                             min={MIN_SIZE}
-                            max={MAX_SIZE}
+                            max={MAX_NEW_SIZE}
                             value={cols}
                             onChange={(e) => setCols(e.target.value)}
                         />

@@ -11,8 +11,10 @@ import { segment } from './segment.ts';
 
 export const MIN_SIZE = 5;
 export const MAX_SIZE = 15;
-export const DEFAULT_SIZE = 9;
-export const SIZE_PRESETS = [9, 11, 13] as const;
+/** The largest grid the editor offers for a new puzzle. Bigger grids (up to MAX_SIZE, Pataparbon's limit) still open. */
+export const MAX_NEW_SIZE = 10;
+export const DEFAULT_SIZE = 6;
+export const SIZE_PRESETS = [6, 8, 10] as const;
 
 export type Direction = 'across' | 'down';
 
@@ -44,6 +46,11 @@ const EMPTY: Cell = Object.freeze({ a: '', d: '' });
 
 export function isValidSize(n: number): boolean {
     return Number.isInteger(n) && n >= MIN_SIZE && n <= MAX_SIZE;
+}
+
+/** A size the New dialog accepts. */
+export function isValidNewSize(n: number): boolean {
+    return Number.isInteger(n) && n >= MIN_SIZE && n <= MAX_NEW_SIZE;
 }
 
 export function createGrid(rows: number = DEFAULT_SIZE, cols: number = rows): Grid {

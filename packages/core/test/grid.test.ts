@@ -41,10 +41,10 @@ function place(g: Grid, r: number, c: number, dir: 'across' | 'down', word: stri
 }
 
 describe('createGrid', () => {
-    it('defaults to 9×9, all white and empty', () => {
+    it('defaults to 6×6, all white and empty', () => {
         const g = createGrid();
-        expect([g.rows, g.cols]).toEqual([9, 9]);
-        expect(gridStats(g)).toEqual({ white: 81, filled: 0, blocks: 0, conflicts: 0 });
+        expect([g.rows, g.cols]).toEqual([6, 6]);
+        expect(gridStats(g)).toEqual({ white: 36, filled: 0, blocks: 0, conflicts: 0 });
     });
 
     it('allows different rows and columns within 5–15', () => {
@@ -249,5 +249,16 @@ describe('placeAnswer and conflicts', () => {
 describe('toBengaliDigits', () => {
     it('converts digits', () => {
         expect(toBengaliDigits(1234567890)).toBe('১২৩৪৫৬৭৮৯০');
+    });
+});
+
+describe('new puzzle sizes', () => {
+    it('offers 5 to 10 for a new puzzle but still opens up to 15', async () => {
+        const { isValidNewSize, isValidSize, MAX_NEW_SIZE } = await import('../src/grid.ts');
+        expect(MAX_NEW_SIZE).toBe(10);
+        expect(isValidNewSize(10)).toBe(true);
+        expect(isValidNewSize(11)).toBe(false);
+        expect(isValidNewSize(4)).toBe(false);
+        expect(isValidSize(15)).toBe(true);
     });
 });

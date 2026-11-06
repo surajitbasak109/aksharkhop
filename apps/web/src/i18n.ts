@@ -19,7 +19,7 @@ export const ui = {
     custom: { bn: 'নিজের মাপ', en: 'Custom' },
     create: { bn: 'তৈরি করুন', en: 'Create' },
     cancel: { bn: 'বাতিল', en: 'Cancel' },
-    sizeHint: { bn: '৫ থেকে ১৫', en: '5 to 15' },
+    sizeHint: { bn: '৫ থেকে ১০', en: '5 to 10' },
     replaceConfirm: {
         bn: 'এখনকার শব্দছকটি মুছে যাবে, ফেরানো যাবে না। আগে সংরক্ষণ করে নিন। চালিয়ে যাবেন?',
         en: 'This replaces the current crossword and cannot be undone. Save it first. Continue?',
@@ -520,8 +520,8 @@ export const landing = {
         {
             title: { bn: 'ছক-সম্পাদক', en: 'Grid editor' },
             text: {
-                bn: '৫×৫ থেকে ১৫×১৫ পর্যন্ত যেকোনো মাপ। কালো ঘর বসান, চাইলে ১৮০° প্রতিসাম্য রাখুন। নম্বর নিজে থেকে বসে। পূর্বাবস্থা, কিবোর্ডে চলাচল সবই আছে।',
-                en: 'Any size from 5×5 to 15×15. Place blocks, keep 180° symmetry if you like. Numbers appear on their own. Undo and keyboard movement included.',
+                bn: '৫×৫ থেকে ১০×১০ পর্যন্ত যেকোনো মাপ। কালো ঘর বসান, চাইলে ১৮০° প্রতিসাম্য রাখুন। নম্বর নিজে থেকে বসে। পূর্বাবস্থা, কিবোর্ডে চলাচল সবই আছে।',
+                en: 'Any size from 5×5 to 10×10. Place blocks, keep 180° symmetry if you like. Numbers appear on their own. Undo and keyboard movement included.',
             },
         },
         {
@@ -587,8 +587,8 @@ export const landing = {
         {
             title: { bn: 'ছক আঁকুন', en: 'Draw the grid' },
             text: {
-                bn: 'মাপ বেছে নিন (৯×৯ দিয়ে শুরু করা যায়), তারপর ক্লিক করে কালো ঘর বসান।',
-                en: 'Pick a size (9×9 is a good start), then click to place the black blocks.',
+                bn: 'মাপ বেছে নিন (৬×৬ দিয়ে শুরু করা যায়), তারপর ক্লিক করে কালো ঘর বসান।',
+                en: 'Pick a size (6×6 is a good start), then click to place the black blocks.',
             },
         },
         {
