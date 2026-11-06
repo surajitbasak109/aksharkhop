@@ -16,3 +16,4 @@ export * from './share.ts';
 export * from './solve.ts';
 export * from './samplePuzzle.ts';
 export * from './wordFile.ts';
+export * from './clueDraft.ts';

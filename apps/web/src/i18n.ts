@@ -110,6 +110,69 @@ export const ui = {
         en: 'Press Enter or click elsewhere when done: the Bengali is saved then.',
     },
 
+    draftButton: { bn: 'খসড়া', en: 'Draft' },
+    draftTitle: { bn: 'সূত্রের খসড়া (Claude)', en: 'Draft a clue (Claude)' },
+    draftMode: { bn: 'পদ্ধতি', en: 'Method' },
+    draftModePaste: { bn: 'কপি-পেস্ট (বিনা খরচে)', en: 'Copy and paste (free)' },
+    draftModeKey: { bn: 'নিজের API কী', en: 'My own API key' },
+    draftPaste1: {
+        bn: 'নিচের লেখাটি কপি করুন।',
+        en: 'Copy the text below.',
+    },
+    draftPaste2: {
+        bn: 'যে কোনো চ্যাটবটে (Claude, Gemini, ChatGPT…) পেস্ট করে উত্তর কপি করুন।',
+        en: 'Paste it into any chatbot (Claude, Gemini, ChatGPT…) and copy its reply.',
+    },
+    draftPaste3: {
+        bn: 'উত্তরটি নিচের দ্বিতীয় বাক্সে পেস্ট করে “উত্তর পড়ুন” চাপুন।',
+        en: 'Paste the reply in the second box and press “Read reply”.',
+    },
+    draftPromptLabel: { bn: 'চ্যাটবটের জন্য লেখা', en: 'Text for the chatbot' },
+    draftCopyPrompt: { bn: 'লেখাটি কপি', en: 'Copy text' },
+    draftReplyLabel: { bn: 'চ্যাটবটের উত্তর', en: 'The chatbot’s reply' },
+    draftReadReply: { bn: 'উত্তর পড়ুন', en: 'Read reply' },
+    draftPasteSends: {
+        bn: 'এই সাইট কিছুই পাঠায় না: কপি-পেস্ট আপনি নিজে করেন।',
+        en: 'This site sends nothing anywhere: you do the copying and pasting yourself.',
+    },
+    draftKeyHelp: {
+        bn: 'খসড়া করতে আপনার নিজের Claude API কী লাগবে।',
+        en: 'Drafting needs your own Claude API key.',
+    },
+    draftKeyMemory: {
+        bn: 'কী শুধু এই পাতার মেমরিতে থাকে। পাতা রিলোড করলে বা বন্ধ করলে মুছে যায়। কোথাও সংরক্ষণ বা শেয়ার হয় না।',
+        en: 'The key stays in this page’s memory only. Reloading or closing the page clears it. It is never saved, shared or exported.',
+    },
+    draftKeyLimit: {
+        bn: 'শুধু এই কাজের জন্য আলাদা কী বানান, আর Anthropic কনসোলে খরচের সীমা দিন।',
+        en: 'Make a separate key just for this, with a spend limit in the Anthropic console.',
+    },
+    draftKeySends: {
+        bn: 'উত্তরের শব্দটি সরাসরি Anthropic-এ যায়, এই সাইটের কোনো সার্ভারে নয়। শুধু এই ঠিকানার পাতাতেই কী দিন।',
+        en: 'The answer word goes straight to Anthropic, not through any server of this site. Only paste a key on this exact address.',
+    },
+    draftKeyLabel: { bn: 'Claude API কী', en: 'Claude API key' },
+    draftUseKey: { bn: 'কী ব্যবহার করুন', en: 'Use key' },
+    draftForgetKey: { bn: 'কী ভুলে যান', en: 'Forget key' },
+    draftAgain: { bn: 'আবার খসড়া', en: 'Draft again' },
+    draftWorking: { bn: 'খসড়া হচ্ছে…', en: 'Drafting…' },
+    draftReview: {
+        bn: 'এগুলো খসড়া। পড়ে দেখে একটি বেছে নিন, তারপর দরকারমতো বদলান।',
+        en: 'These are drafts. Read them, pick one, then edit it if needed.',
+    },
+    draftErrNoKey: { bn: 'কী দিন।', en: 'Enter a key.' },
+    draftErrBadKey: { bn: 'কীটি চলল না। ঠিক আছে কিনা দেখুন।', en: 'The key was refused. Check it.' },
+    draftErrRate: {
+        bn: 'অনেক অনুরোধ হয়েছে। একটু পরে চেষ্টা করুন।',
+        en: 'Too many requests. Try again shortly.',
+    },
+    draftErrNetwork: { bn: 'Anthropic-এর সঙ্গে যোগ হল না।', en: 'Could not reach Anthropic.' },
+    draftErrServer: { bn: 'Anthropic থেকে ভুল উত্তর এল।', en: 'Anthropic returned an error.' },
+    draftErrNone: {
+        bn: 'কাজে লাগার মতো সূত্র পাওয়া গেল না (সব উত্তর-ফাঁস)। আবার চেষ্টা করুন।',
+        en: 'No usable clue (each gave the answer away). Try again.',
+    },
+
     exportPataparbon: { bn: 'Pataparbon-এর জন্য', en: 'Export to Pataparbon' },
     exportTitleOk: { bn: 'Pataparbon-এ পাঠানো যাবে', en: 'Ready for Pataparbon' },
     exportTitleBad: { bn: 'এখনও পাঠানো যাবে না', en: 'Cannot export yet' },

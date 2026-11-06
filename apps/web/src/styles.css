@@ -824,3 +824,34 @@ select {
 .solve .clue-list ol {
     max-height: 420px;
 }
+
+.draft-list {
+    list-style: none;
+    margin: 0 0 12px;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+}
+.draft-list button {
+    width: 100%;
+    text-align: left;
+}
+.draft-button {
+    margin-top: 4px;
+}
+
+.mode-switch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+.mode-switch button[aria-pressed='true'] {
+    font-weight: 700;
+    border-color: currentColor;
+}
+.dialog textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font: inherit;
+}

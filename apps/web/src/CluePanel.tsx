@@ -9,6 +9,7 @@ import {
     type Puzzle,
 } from '@aksharkhop/core';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { DraftDialog } from './DraftDialog.tsx';
 import { fmt, plain, ui } from './i18n.ts';
 import { T } from './T.tsx';
 
@@ -97,6 +98,7 @@ function ClueList({
     onClue: Props['onClue'];
 }) {
     const listRef = useRef<HTMLOListElement>(null);
+    const [drafting, setDrafting] = useState<ClueRow | null>(null);
     const activeKey = selected && selected.dir === dir ? `${selected.r}:${selected.c}` : '';
 
     // Keep the selected clue in view inside its own list. (scrollIntoView would also move the page
@@ -152,6 +154,15 @@ function ClueList({
                                         onFocus={() => onSelect(dir, row.slot.r, row.slot.c, false)}
                                         onCommit={(text) => onClue(row.key, text)}
                                     />
+                                    {row.answer !== '' && (
+                                        <button
+                                            type="button"
+                                            className="small draft-button"
+                                            onClick={() => setDrafting(row)}
+                                        >
+                                            <T t={ui.draftButton} />
+                                        </button>
+                                    )}
                                     {row.issues.includes('clue_has_answer') && (
                                         <p className="warn small">
                                             <T t={ui.clueGivesAway} />
@@ -162,6 +173,16 @@ function ClueList({
                         );
                     })}
                 </ol>
+            )}
+            {drafting && (
+                <DraftDialog
+                    answer={drafting.answer}
+                    onClose={() => setDrafting(null)}
+                    onPick={(clue) => {
+                        onClue(drafting.key, clue);
+                        setDrafting(null);
+                    }}
+                />
             )}
         </div>
     );
