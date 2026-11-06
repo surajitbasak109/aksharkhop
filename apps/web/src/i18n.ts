@@ -112,6 +112,10 @@ export const ui = {
 
     draftButton: { bn: 'খসড়া', en: 'Draft' },
     draftTitle: { bn: 'সূত্রের খসড়া (Claude)', en: 'Draft a clue (Claude)' },
+    draftApproved: {
+        bn: 'অনুমোদিত সূত্র (মানুষ দেখে নিয়েছেন):',
+        en: 'Approved clues (reviewed by a person):',
+    },
     draftMode: { bn: 'পদ্ধতি', en: 'Method' },
     draftModePaste: { bn: 'কপি-পেস্ট (বিনা খরচে)', en: 'Copy and paste (free)' },
     draftModeKey: { bn: 'নিজের API কী', en: 'My own API key' },

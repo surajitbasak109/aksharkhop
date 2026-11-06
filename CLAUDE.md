@@ -23,4 +23,5 @@ Commands (from the repo root):
 - `pnpm test` / `pnpm typecheck` / `pnpm lint` / `pnpm format`
 - `pnpm seg ক্ষমা` prints the cells; `pnpm seg words.txt` does a file
 - `python3 scripts/build_wordlist.py` rebuilds `public/words.bn.json` (untracked) and `public/words.txt` (the small list the app loads, committed) (needs `data/raw/`); `python3 -m unittest discover -s scripts -v` tests it
+- `node scripts/clues.ts batches|import|approve` is the clue pipeline: batch prompts to paste into a chatbot, a review sheet (TSV), and the approved clues in `public/clues.txt` (committed; the editor suggests them)
 - `node scripts/check-segmentation.mjs` compares `data/test/segmentation.tsv` with Pataparbon's splitter

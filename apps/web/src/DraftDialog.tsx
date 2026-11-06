@@ -7,6 +7,7 @@ import {
 } from '@aksharkhop/core';
 import { useEffect, useRef, useState } from 'react';
 import { copyText } from './clipboard.ts';
+import { approvedCluesFor } from './approvedClues.ts';
 import { clearApiKey, getApiKey, setApiKey } from './apiKey.ts';
 import { plain, ui, type Text } from './i18n.ts';
 import { T } from './T.tsx';
@@ -46,6 +47,15 @@ export function DraftDialog({
     const [reply, setReply] = useState('');
     const [pasteDrafts, setPasteDrafts] = useState<string[] | null>(null);
     const prompt = buildCopyPrompt(answer);
+    const [approved, setApproved] = useState<string[]>([]);
+
+    useEffect(() => {
+        let live = true;
+        void approvedCluesFor(answer).then((c) => live && setApproved(c));
+        return () => {
+            live = false;
+        };
+    }, [answer]);
 
     useEffect(() => {
         const d = ref.current;
@@ -90,6 +100,23 @@ export function DraftDialog({
             <p lang="bn" className="clue-answer">
                 {answer}
             </p>
+
+            {approved.length > 0 && (
+                <>
+                    <p className="small">
+                        <T t={ui.draftApproved} />
+                    </p>
+                    <ul className="draft-list">
+                        {approved.map((d) => (
+                            <li key={d}>
+                                <button type="button" lang="bn" onClick={() => onPick(d)}>
+                                    {d}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
 
             <div className="mode-switch" role="group" aria-label={plain(ui.draftMode)}>
                 <button type="button" aria-pressed={mode === 'paste'} onClick={() => setMode('paste')}>
